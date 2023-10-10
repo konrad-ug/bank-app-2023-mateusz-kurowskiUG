@@ -1,0 +1,6 @@
+# Bank app
+
+Imię i nazwisko: ...
+
+Grupa: ...
+ 
