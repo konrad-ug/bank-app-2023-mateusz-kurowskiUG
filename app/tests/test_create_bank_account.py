@@ -39,3 +39,37 @@ class TestCreateBankAccount(unittest.TestCase):
         kod_rabatowy = "EASDASSAD_123"
         konto = Konto(self.name, self.last_name, self.pesel, kod_rabatowy)
         self.assertEqual(konto.saldo, 0, "Saldo nie jest równe 0!")
+
+    def test_osoba_urodzona_w_2000_r(self):
+        konto = Konto(self.name, self.last_name, "00010112345")
+        self.assertEqual(
+            konto.find_rok_urodzenia(), "2000", "Rok urodzenia nie jest równy 2000!"
+        )
+
+    def test_osoba_urodzona_w_1960_r(self):
+        konto = Konto(self.name, self.last_name, "60110112345")
+        self.assertEqual(
+            konto.find_rok_urodzenia(), "1960", "Rok urodzenia nie jest równy 1960!"
+        )
+
+    def test_osoba_urodzona_w_1950_r(self):
+        konto = Konto(self.name, self.last_name, "70110112345")
+        self.assertEqual(
+            konto.find_rok_urodzenia(), "1950", "Rok urodzenia nie jest równy 1950!"
+        )
+
+    def test_osoba_niepoprawny_pesel(self):
+        konto = Konto(self.name, self.last_name, "1237890")
+        self.assertEqual(
+            konto.find_rok_urodzenia(),
+            "Niepoprawny pesel!",
+            "Pesel powinien być niepoprawny!",
+        )
+
+    def test_osoba_urodzona_w_1970_r_zly_kod(self):
+        konto = Konto(self.name, self.last_name, "1237890")
+        self.assertEqual(
+            konto.find_rok_urodzenia(),
+            "Niepoprawny pesel!",
+            "Pesel powinien być niepoprawny!",
+        )
