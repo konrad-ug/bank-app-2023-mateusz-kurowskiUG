@@ -41,35 +41,39 @@ class TestCreateBankAccount(unittest.TestCase):
         self.assertEqual(konto.saldo, 0, "Saldo nie jest równe 0!")
 
     def test_osoba_urodzona_w_2000_r(self):
-        konto = Konto(self.name, self.last_name, "00010112345")
+        konto = Konto(self.name, self.last_name, "00220791395", "PROM_997")
         self.assertEqual(
-            konto.find_rok_urodzenia(), "2000", "Rok urodzenia nie jest równy 2000!"
+            konto.znajdz_rok_urodzenia(), 2000, "Rok urodzenia nie jest równy 2000!"
         )
 
     def test_osoba_urodzona_w_1960_r(self):
-        konto = Konto(self.name, self.last_name, "60110112345")
+        konto = Konto(self.name, self.last_name, "60020723813", "PROM_997")
         self.assertEqual(
-            konto.find_rok_urodzenia(), "1960", "Rok urodzenia nie jest równy 1960!"
+            konto.znajdz_rok_urodzenia(), 1960, "Rok urodzenia nie jest równy 1960!"
         )
+        self.assertEqual(konto.saldo, 50, "Saldo nie jest równe 0!")
 
     def test_osoba_urodzona_w_1950_r(self):
-        konto = Konto(self.name, self.last_name, "70110112345")
+        konto = Konto(self.name, self.last_name, "50020763618", "PROM_997")
         self.assertEqual(
-            konto.find_rok_urodzenia(), "1950", "Rok urodzenia nie jest równy 1950!"
+            konto.znajdz_rok_urodzenia(), 1950, "Rok urodzenia nie jest równy 1950!"
         )
+        self.assertEqual(konto.saldo, 0, "Saldo nie jest równe 0!")
 
     def test_osoba_niepoprawny_pesel(self):
-        konto = Konto(self.name, self.last_name, "1237890")
+        konto = Konto(self.name, self.last_name, "1237890", "PROM_997")
         self.assertEqual(
-            konto.find_rok_urodzenia(),
-            "Niepoprawny pesel!",
+            konto.znajdz_rok_urodzenia(),
+            0,
             "Pesel powinien być niepoprawny!",
         )
+        self.assertEqual(konto.saldo, 0, "Saldo nie jest równe 0!")
 
     def test_osoba_urodzona_w_1970_r_zly_kod(self):
-        konto = Konto(self.name, self.last_name, "1237890")
+        konto = Konto(self.name, self.last_name, "70020796359", "PR12M_1")
         self.assertEqual(
-            konto.find_rok_urodzenia(),
-            "Niepoprawny pesel!",
-            "Pesel powinien być niepoprawny!",
+            konto.znajdz_rok_urodzenia(),
+            1970,
+            "Pesel się nie zgadza!",
         )
+        self.assertEqual(konto.saldo, 0, "Saldo nie jest równe 0!")
