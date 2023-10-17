@@ -38,3 +38,7 @@ class TestTransfers(unittest.TestCase):
         acc1 = Account_Personal(self.name, self.last_name, self.pesel, self.prom_code)
         acc1.receive_transfer(50)
         self.assertEqual(acc1.saldo, 50, "Przelew nie dotarł!")
+
+    def express_valid_transfer(self):
+        acc1 = Account_Personal(self.name, self.last_name, self.pesel, self.prom_code)
+        
