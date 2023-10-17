@@ -14,5 +14,5 @@ class Account:
             self.saldo += amount
 
     def express_outgoing_transfer(self, amount):
-        if self.saldo >= amount + self.express_transfer_fee:
+        if self.saldo - 1 >= amount + self.express_transfer_fee:
             self.saldo -= amount + self.express_transfer_fee
