@@ -4,7 +4,7 @@ from .Account import Account
 
 class Account_Personal(Account):
     def __init__(self, name, last_name, pesel, promo_code=None):
-        express_transfer_fee = 1
+        self.express_transfer_fee = 1
         self.name = name
         self.last_name = last_name
         self.saldo = 0
