@@ -17,7 +17,7 @@ class TestTransfers(unittest.TestCase):
     test_expense = 50
     test_correct_balance = test_balance - test_expense
 
-    def transfer_no_balance(self):
+    def test_transfer_no_balance(self):
         acc_personal = AccountPersonal(
             self.name, self.last_name, self.pesel, self.prom_code
         )
@@ -32,7 +32,7 @@ class TestTransfers(unittest.TestCase):
             acc_company.saldo, 0, f"Saldo nie jest równe {self.test_correct_balance}"
         )
 
-    def transfer_incorrect_amount(self):
+    def test_transfer_incorrect_amount(self):
         acc_personal = AccountPersonal(
             self.name, self.last_name, self.pesel, self.prom_code
         )
@@ -41,7 +41,7 @@ class TestTransfers(unittest.TestCase):
         self.assertEqual(
             acc_personal.saldo,
             self.test_balance,
-            f"Saldo nie jest równe {self.test_correct_balance}",
+            f"Saldo nie jest równe {self.test_balance}",
         )
 
         acc_company = AccountCompany(self.company_name, self.company_nip)
@@ -53,12 +53,12 @@ class TestTransfers(unittest.TestCase):
             f"Saldo nie jest równe {self.test_balance}",
         )
 
-    def outgoing_transfer(self):
+    def test_outgoing_transfer(self):
         acc_personal = AccountPersonal(
             self.name, self.last_name, self.pesel, self.prom_code
         )
         acc_personal.saldo = self.test_balance
-        acc_personal.transfer(self.test_expense)
+        acc_personal.outing_transfer(self.test_expense)
         self.assertEqual(
             acc_personal.saldo,
             self.test_correct_balance,
@@ -74,9 +74,11 @@ class TestTransfers(unittest.TestCase):
             f"Saldo nie jest równe {self.test_correct_balance}",
         )
 
-    def receive_transfer(self):
+    def test_receive_transfer(self):
         acc_personal = AccountPersonal(
-            self.name, self.last_name, self.pesel, self.prom_code
+            self.name,
+            self.last_name,
+            self.pesel,
         )
         acc_personal.receive_transfer(self.test_correct_balance)
         self.assertEqual(
@@ -92,7 +94,7 @@ class TestTransfers(unittest.TestCase):
             f"Przelew w wysokości {self.test_correct_balance} nie dotarł!",
         )
 
-    def express_valid_transfer(self):
+    def test_express_valid_transfer(self):
         acc_personal = AccountPersonal(
             self.name, self.last_name, self.pesel, self.prom_code
         )
@@ -111,4 +113,3 @@ class TestTransfers(unittest.TestCase):
             self.test_correct_balance - acc_company.express_transfer_fee,
             f"Saldo się nie zgadza!",
         )
-        self.assertEqual(1, 0, "1=0")
