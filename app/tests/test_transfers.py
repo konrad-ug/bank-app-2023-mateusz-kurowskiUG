@@ -1,7 +1,7 @@
 import unittest
-from ..Account import Account
-from ..Account_company import Account_Company
-from ..Account_personal import Account_Personal
+
+from ..Account_company import AccountCompany
+from ..Account_personal import AccountPersonal
 
 
 class TestTransfers(unittest.TestCase):
@@ -18,7 +18,7 @@ class TestTransfers(unittest.TestCase):
     test_correct_balance = test_balance - test_expense
 
     def transfer_no_balance(self):
-        acc_personal = Account_Personal(
+        acc_personal = AccountPersonal(
             self.name, self.last_name, self.pesel, self.prom_code
         )
         acc_personal.outing_transfer(self.test_expense)
@@ -26,14 +26,14 @@ class TestTransfers(unittest.TestCase):
             acc_personal.saldo, 0, f"Saldo nie jest równe {self.test_correct_balance}"
         )
 
-        acc_company = Account_Company(self.company_name, self.company_nip)
+        acc_company = AccountCompany(self.company_name, self.company_nip)
         acc_company.outing_transfer(self.test_expense)
         self.assertEqual(
             acc_company.saldo, 0, f"Saldo nie jest równe {self.test_correct_balance}"
         )
 
     def transfer_incorrect_amount(self):
-        acc_personal = Account_Personal(
+        acc_personal = AccountPersonal(
             self.name, self.last_name, self.pesel, self.prom_code
         )
         acc_personal.saldo = self.test_balance
@@ -44,7 +44,7 @@ class TestTransfers(unittest.TestCase):
             f"Saldo nie jest równe {self.test_correct_balance}",
         )
 
-        acc_company = Account_Company(self.company_name, self.company_nip)
+        acc_company = AccountCompany(self.company_name, self.company_nip)
         acc_company.saldo = self.test_balance
         acc_company.outing_transfer(-self.test_expense)
         self.assertEqual(
@@ -54,7 +54,7 @@ class TestTransfers(unittest.TestCase):
         )
 
     def outgoing_transfer(self):
-        acc_personal = Account_Personal(
+        acc_personal = AccountPersonal(
             self.name, self.last_name, self.pesel, self.prom_code
         )
         acc_personal.saldo = self.test_balance
@@ -65,7 +65,7 @@ class TestTransfers(unittest.TestCase):
             "Przelew nie został wykonany!",
         )
 
-        acc_company = Account_Company(self.company_name, self.company_nip)
+        acc_company = AccountCompany(self.company_name, self.company_nip)
         acc_company.saldo = self.test_balance
         acc_company.outing_transfer(self.test_expense)
         self.assertEqual(
@@ -75,7 +75,7 @@ class TestTransfers(unittest.TestCase):
         )
 
     def receive_transfer(self):
-        acc_personal = Account_Personal(
+        acc_personal = AccountPersonal(
             self.name, self.last_name, self.pesel, self.prom_code
         )
         acc_personal.receive_transfer(self.test_correct_balance)
@@ -84,7 +84,7 @@ class TestTransfers(unittest.TestCase):
             self.test_correct_balance,
             f"Przelew w wysokości {self.test_correct_balance} nie dotarł!",
         )
-        acc_company = Account_Company(self.company_name, self.company_nip)
+        acc_company = AccountCompany(self.company_name, self.company_nip)
         acc_company.receive_transfer(self.test_correct_balance)
         self.assertEqual(
             acc_company.saldo,
@@ -93,7 +93,7 @@ class TestTransfers(unittest.TestCase):
         )
 
     def express_valid_transfer(self):
-        acc_personal = Account_Personal(
+        acc_personal = AccountPersonal(
             self.name, self.last_name, self.pesel, self.prom_code
         )
         acc_personal.saldo = self.test_balance
@@ -103,7 +103,7 @@ class TestTransfers(unittest.TestCase):
             self.test_correct_balance - acc_personal.express_transfer_fee,
             "Saldo się nie zgadza!",
         )
-        acc_company = Account_Company(self.company_name, self.company_nip)
+        acc_company = AccountCompany(self.company_name, self.company_nip)
         acc_company.saldo = self.test_balance
         acc_company.express_outgoing_transfer(self.test_expense)
         self.assertEqual(

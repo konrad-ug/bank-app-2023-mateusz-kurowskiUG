@@ -2,7 +2,7 @@ import re, datetime
 from .Account import Account
 
 
-class Account_Personal(Account):
+class AccountPersonal(Account):
     def __init__(self, name, last_name, pesel, promo_code=None):
         self.express_transfer_fee = 1
         self.name = name

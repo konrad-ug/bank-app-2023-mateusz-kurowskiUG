@@ -1,7 +1,7 @@
 from .Account import Account
 
 
-class Account_Company(Account):
+class AccountCompany(Account):
     def __init__(self, name, nip):
         super().__init__()
         self.express_transfer_fee = 5
