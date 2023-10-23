@@ -101,12 +101,12 @@ class CreateCompanyAccountPersonal(unittest.TestCase):
     nip = "1234567890"
     invalid_nip = nip[1:5]
 
-    def test_create_valid_AccountPersonal(self):
+    def test_create_valid_AccountCompany(self):
         acc = AccountCompany(self.name, self.nip)
         self.assertEqual(self.name, acc.name, "Nazwa nie została zapisana!")
         self.assertEqual(self.nip, acc.nip, "Nip nie został zapisany!")
 
-    def test_create_invalid_AccountPersonal(self):
+    def test_create_invalid_AccountCompany(self):
         acc = AccountCompany(self.name, self.invalid_nip)
         self.assertEqual(self.name, acc.name, "Nazwa nie została zapisana!")
         self.assertEqual(acc.nip, "Niepoprawny NIP!", "NIP powinien być niepoprawny!")
