@@ -105,6 +105,11 @@ class TestTransfers(unittest.TestCase):
             self.test_correct_balance - acc_personal.express_transfer_fee,
             "Saldo się nie zgadza!",
         )
+        self.assertEqual(
+            acc_personal.history,
+            [-self.test_expense, -acc_company.express_transfer_fee],
+            "Historia konta się nie zgadza!",
+        )
         acc_company = AccountCompany(self.company_name, self.company_nip)
         acc_company.saldo = self.test_balance
         acc_company.express_outgoing_transfer(self.test_expense)
@@ -113,3 +118,28 @@ class TestTransfers(unittest.TestCase):
             self.test_correct_balance - acc_company.express_transfer_fee,
             f"Saldo się nie zgadza!",
         )
+        self.assertEqual(
+            acc_company.history,
+            [-self.test_expense, -acc_company.express_transfer_fee],
+            "Historia konta się nie zgadza!",
+        )
+
+    def test_express_invalid_transfer(self):
+        acc_personal = AccountPersonal(self.name, self.last_name, self.pesel)
+        acc_personal.saldo = self.test_expense
+        acc_personal.express_outgoing_transfer(self.test_expense)
+        self.assertEqual(
+            acc_personal.saldo,
+            self.test_expense,
+            "Saldo się nie zgadza!",
+        )
+        acc_company = AccountCompany(self.company_name, self.company_nip)
+        acc_company.saldo = self.test_expense
+        acc_company.express_outgoing_transfer(self.test_expense)
+        self.assertEqual(
+            acc_company.saldo,
+            self.test_expense,
+            f"Saldo się nie zgadza!",
+        )
+        # self.assertEqual(acc_personal.history, [], "Historia konta się nie zgadza!")
+        # self.assertEqual(acc_company.history, [], "Historia konta się nie zgadza!")
