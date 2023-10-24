@@ -1,21 +1,23 @@
 import re, datetime
+from .Account import Account
 
 
-class Konto:
-    def __init__(self, imie, nazwisko, pesel, kod_rabatowy=None):
-        self.imie = imie
-        self.nazwisko = nazwisko
+class AccountPersonal(Account):
+    def __init__(self, name, last_name, pesel, promo_code=None):
+        self.express_transfer_fee = 1
+        self.name = name
+        self.last_name = last_name
         self.saldo = 0
         if self.validate_pesel(pesel):
             self.pesel = pesel
         else:
             self.pesel = "Niepoprawny pesel!"
 
-        if self.promoBank(kod_rabatowy):
+        if self.promoBank(promo_code):
             self.saldo = 50
 
-    def czy_poprawny_kod_rabatowy(self, kod_rabatowy):
-        return kod_rabatowy and re.match("^PROM_...$", kod_rabatowy) is not None
+    def czy_poprawny_promo_code(self, promo_code):
+        return promo_code and re.match("^PROM_...$", promo_code) is not None
 
     def validate_pesel(self, pesel):
         if len(pesel) != 11:
@@ -42,10 +44,10 @@ class Konto:
             case default:
                 return None
 
-    def promoBank(self, kod_rabatowy=None):
-        if self.pesel != "Niepoprawny pesel!" and kod_rabatowy is not None:
+    def promoBank(self, promo_code=None):
+        if self.pesel != "Niepoprawny pesel!" and promo_code is not None:
             return (
-                self.czy_poprawny_kod_rabatowy(kod_rabatowy)
+                self.czy_poprawny_promo_code(promo_code)
                 and self.znajdz_rok_urodzenia(self.pesel) >= 1960
             )
         else:
