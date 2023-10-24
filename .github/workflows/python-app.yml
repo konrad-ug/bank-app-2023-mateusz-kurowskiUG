@@ -37,3 +37,5 @@ jobs:
     - name: Test with Unittest
       run: |
         python3 -m unittest
+        python3 -m coverage run -m unittest
+        python3 -m coverage report
