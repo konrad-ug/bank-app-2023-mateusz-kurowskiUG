@@ -12,6 +12,24 @@ class TestCredits(unittest.TestCase):
     def setUp(self):
         self.acc_personal = AccountPersonal(self.name, self.last_name, self.pesel)
 
+    @parameterized(([100, 100], 500, False, 0), ([-100, 100, 100, 100], 500, True, 500))
+    def test_taking_credits(
+        self, history, credit_val, expected_decision, expected_balance
+    ):
+        self.acc_personal.history = history
+        decision = self.acc_personal.take_credit(credit_val)
+        self.assertEqual(
+            decision,
+            expected_decision,
+            f"Expected desision should be: {expected_decision}",
+        )
+
+        self.assertEqual(
+            self.acc_personal.saldo,
+            expected_balance,
+            f"Balance should be equal to {expected_balance}",
+        )
+
     def test_2_transfers(self):
         self.acc_personal.history = [-100, 100]
         decision = self.acc_personal.take_credit(self.example_credit)
