@@ -52,3 +52,25 @@ class AccountPersonal(Account):
             )
         else:
             return False
+
+    def check_three_last_transactions(self):
+        last_three = self.history[-3:]
+        if all(element > 0 for element in last_three) and len(last_three) == 3:
+            return True
+        return False
+
+    def check_five_last_transactions(self, val):
+        last_five = self.history[-5:]
+        if sum(last_five) > val and len(last_five) == 5:
+            return True
+        return False
+
+    def take_credit(self, amount):
+        if amount <= 0:
+            return False
+        if self.check_three_last_transactions() or self.check_five_last_transactions(
+            amount
+        ):
+            self.saldo += amount
+            return True
+        return False
