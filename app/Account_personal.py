@@ -24,12 +24,9 @@ class AccountPersonal(Account):
             return False
         else:
             found_year = self.znajdz_rok_urodzenia(pesel)
-            if found_year > datetime.date.today().year:
+            if found_year is None or found_year > datetime.date.today().year:
                 return False
-            elif found_year is None:
-                return False
-            else:
-                return True
+            return True
 
     def znajdz_rok_urodzenia(self, pesel):
         match pesel[2]:
