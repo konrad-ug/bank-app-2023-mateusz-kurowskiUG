@@ -88,6 +88,18 @@ class TestCreateBankAccountPersonal(unittest.TestCase):
         self.porownaj_pesel(acc, "70020796359")
         self.porownaj_balans(acc, 0)
 
+    def test_osoba_urodzona_w_1901_r(self):
+        acc = AccountPersonal(self.name, self.last_name, "11110112345", "PR12M_1")
+        self.porownaj_dane(acc, self.name, self.last_name)
+        self.porownaj_pesel(acc, "11110112345")
+        self.porownaj_balans(acc, 0)
+
+    def test_niepoprawny_miesiac_w_peselu(self):
+        acc = AccountPersonal(self.name, self.last_name, "11990112345", "PR12M_1")
+        self.porownaj_dane(acc, self.name, self.last_name)
+        self.porownaj_pesel(acc, "Niepoprawny pesel!")
+        self.porownaj_balans(acc, 0)
+
     # zakładam, że bank nie zezwala na zakładanie kont osobom nie urodzonym.
     def test_osoba_urodzona_w_2099_r(self):
         acc = AccountPersonal(self.name, self.last_name, "99240343666", "PR12M_1")
