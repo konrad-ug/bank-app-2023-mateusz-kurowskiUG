@@ -1,6 +1,7 @@
 import unittest
 from ..Account_company import AccountCompany
 from ..Account_personal import AccountPersonal
+from parameterized import *
 
 
 class TestCredits(unittest.TestCase):
@@ -12,7 +13,9 @@ class TestCredits(unittest.TestCase):
     def setUp(self):
         self.acc_personal = AccountPersonal(self.name, self.last_name, self.pesel)
 
-    @parameterized(([100, 100], 500, False, 0), ([-100, 100, 100, 100], 500, True, 500))
+    @parameterized.expand(
+        [([100, 100], 500, False, 0), ([-100, 100, 100, 100], 500, True, 500)]
+    )
     def test_taking_credits(
         self, history, credit_val, expected_decision, expected_balance
     ):

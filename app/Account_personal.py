@@ -11,7 +11,7 @@ class AccountPersonal(Account):
         if self.validate_pesel(pesel):
             self.pesel = pesel
         else:
-            self.pesel = "Niepoprawny pesel!"
+            self.pesel = "PESEL not valid!"
 
         if self.promoBank(promo_code):
             self.saldo = 50
@@ -42,7 +42,7 @@ class AccountPersonal(Account):
                 return None
 
     def promoBank(self, promo_code=None):
-        if self.pesel != "Niepoprawny pesel!" and promo_code is not None:
+        if self.pesel != "PESEL not valid!" and promo_code is not None:
             return (
                 self.czy_poprawny_promo_code(promo_code)
                 and self.znajdz_rok_urodzenia(self.pesel) >= 1960
