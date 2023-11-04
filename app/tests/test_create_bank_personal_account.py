@@ -42,15 +42,15 @@ class TestCreateBankAccountPersonal(unittest.TestCase):
             ("Darius", "Jan", "11990112345", False, 0, "PROM_997"),  # 1901
             ("Darius", "Jan", "99240343666", False, 0, "PROM_997"),  # 1901
             # VALID CODES
-            ("Dariusz", "Jan", "12345678901", True, 50, "PROM_XYZ"),
+            ("Dariusz", "Jan", "12345678901", True, 50, "PROM_XYZ"),  # 2012
             ("Dariusz", "Jan", "00220791395", True, 50, "PROM_401"),  # 2000r.
             ("Dariusz", "Jan", "60020723813", True, 50, "PROM_997"),  # 1960r.
             ("Dariusz", "Jan", "50020763618", True, 0, "PROM_997"),  # 1950r.
             ("Dariusz", "Jan", "11110112345", True, 0, "PROM_111"),  # 1901r.
             # INVALID CODES
-            ("Dariusz", "Jan", "12345678901", True, 0, "PRSADASSAD"),
-            ("Dariusz", "Jan", "12345678901", True, 0, "XPROM_401X"),
-            ("Dariusz", "Jan", "12345678901", True, 0, "PR0M_XYZ"),
+            ("Dariusz", "Jan", "12345678901", True, 0, "PRSADASSAD"),  # 2012
+            ("Dariusz", "Jan", "12345678901", True, 0, "XPROM_401X"),  # 2012
+            ("Dariusz", "Jan", "12345678901", True, 0, "PR0M_XYZ"),  # 2012
             ("Dariusz", "Jan", "70020796359", True, 0, "PR12M_1"),  # 1970r.
         ]
     )
