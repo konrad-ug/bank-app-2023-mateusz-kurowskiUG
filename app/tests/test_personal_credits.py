@@ -1,21 +1,21 @@
 import unittest
-from ..Account_company import AccountCompany
 from ..Account_personal import AccountPersonal
 from parameterized import *
 
 
-class TestCredits(unittest.TestCase):
+class TestPersonalCredits(unittest.TestCase):
     name = "Jan"
     last_name = "Kowalski"
     pesel = "12345678901"
-    example_credit = 1000
 
     def setUp(self):
         self.acc_personal = AccountPersonal(self.name, self.last_name, self.pesel)
 
     def check_balance(self, acc: AccountPersonal, balance):
         self.assertEqual(
-            acc.saldo, balance, f"Balance is equal: {acc.saldo} instead of {balance}!"
+            acc.balance,
+            balance,
+            f"Balance is equal: {acc.balance} instead of {balance}!",
         )
 
     def check_decision(self, decision, expected_decision):

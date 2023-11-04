@@ -7,14 +7,14 @@ class AccountPersonal(Account):
         self.express_transfer_fee = 1
         self.name = name
         self.last_name = last_name
-        self.saldo = 0
+        self.balance = 0
         if self.validate_pesel(pesel):
             self.pesel = pesel
         else:
             self.pesel = "PESEL not valid!"
 
         if self.promoBank(promo_code):
-            self.saldo = 50
+            self.balance = 50
 
     def czy_poprawny_promo_code(self, promo_code):
         return promo_code and re.match("^PROM_...$", promo_code) is not None
@@ -68,6 +68,6 @@ class AccountPersonal(Account):
         if self.check_three_last_transactions() or self.check_five_last_transactions(
             amount
         ):
-            self.saldo += amount
+            self.balance += amount
             return True
         return False

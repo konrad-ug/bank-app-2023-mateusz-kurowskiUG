@@ -15,7 +15,9 @@ class TestCreateBankAccountPersonal(unittest.TestCase):
 
     def check_balance(self, acc: AccountPersonal, balance):
         self.assertEqual(
-            acc.saldo, balance, f"Balance is equal {acc.saldo} instead of {balance}!"
+            acc.balance,
+            balance,
+            f"Balance is equal {acc.balance} instead of {balance}!",
         )
 
     def check_pesel(self, acc: AccountPersonal, pesel, is_pesel_valid):

@@ -23,45 +23,49 @@ class TestTransfers(unittest.TestCase):
         )
         acc_personal.outing_transfer(self.test_expense)
         self.assertEqual(
-            acc_personal.saldo, 0, f"Saldo nie jest równe {self.test_correct_balance}"
+            acc_personal.balance,
+            0,
+            f"balance nie jest równe {self.test_correct_balance}",
         )
 
         acc_company = AccountCompany(self.company_name, self.company_nip)
         acc_company.outing_transfer(self.test_expense)
         self.assertEqual(
-            acc_company.saldo, 0, f"Saldo nie jest równe {self.test_correct_balance}"
+            acc_company.balance,
+            0,
+            f"balance nie jest równe {self.test_correct_balance}",
         )
 
     def test_transfer_incorrect_amount(self):
         acc_personal = AccountPersonal(
             self.name, self.last_name, self.pesel, self.prom_code
         )
-        acc_personal.saldo = self.test_balance
+        acc_personal.balance = self.test_balance
         acc_personal.outing_transfer(-self.test_expense)
         self.assertEqual(
-            acc_personal.saldo,
+            acc_personal.balance,
             self.test_balance,
-            f"Saldo nie jest równe {self.test_balance}",
+            f"balance nie jest równe {self.test_balance}",
         )
 
         acc_company = AccountCompany(self.company_name, self.company_nip)
-        acc_company.saldo = self.test_balance
+        acc_company.balance = self.test_balance
         acc_company.outing_transfer(-self.test_expense)
         self.assertEqual(
-            acc_company.saldo,
+            acc_company.balance,
             self.test_balance,
-            f"Saldo nie jest równe {self.test_balance}",
+            f"balance nie jest równe {self.test_balance}",
         )
 
     def test_outgoing_transfer(self):
         acc_personal = AccountPersonal(
             self.name, self.last_name, self.pesel, self.prom_code
         )
-        acc_personal.saldo = self.test_balance
+        acc_personal.balance = self.test_balance
         acc_personal.history = []
         acc_personal.outing_transfer(self.test_expense)
         self.assertEqual(
-            acc_personal.saldo,
+            acc_personal.balance,
             self.test_correct_balance,
             "Przelew nie został wykonany!",
         )
@@ -70,13 +74,13 @@ class TestTransfers(unittest.TestCase):
         ),
 
         acc_company = AccountCompany(self.company_name, self.company_nip)
-        acc_company.saldo = self.test_balance
+        acc_company.balance = self.test_balance
         acc_company.history = []
         acc_company.outing_transfer(self.test_expense)
         self.assertEqual(
-            acc_company.saldo,
+            acc_company.balance,
             self.test_correct_balance,
-            f"Saldo nie jest równe {self.test_correct_balance}",
+            f"balance nie jest równe {self.test_correct_balance}",
         )
         self.assertEqual(
             acc_company.history, [-self.test_expense], "Historia się nie zgadza!"
@@ -88,11 +92,11 @@ class TestTransfers(unittest.TestCase):
             self.last_name,
             self.pesel,
         )
-        acc_personal.saldo = 0
+        acc_personal.balance = 0
         acc_personal.history = []
         acc_personal.receive_transfer(self.test_correct_balance)
         self.assertEqual(
-            acc_personal.saldo,
+            acc_personal.balance,
             self.test_correct_balance,
             f"Przelew w wysokości {self.test_correct_balance} nie dotarł!",
         )
@@ -104,10 +108,10 @@ class TestTransfers(unittest.TestCase):
 
         acc_company = AccountCompany(self.company_name, self.company_nip)
         acc_company.history = []
-        acc_company.saldo = 0
+        acc_company.balance = 0
         acc_company.receive_transfer(self.test_correct_balance)
         self.assertEqual(
-            acc_company.saldo,
+            acc_company.balance,
             self.test_correct_balance,
             f"Przelew w wysokości {self.test_correct_balance} nie dotarł!",
         )
@@ -119,13 +123,13 @@ class TestTransfers(unittest.TestCase):
         acc_personal = AccountPersonal(
             self.name, self.last_name, self.pesel, self.prom_code
         )
-        acc_personal.saldo = self.test_balance
+        acc_personal.balance = self.test_balance
         acc_personal.history = []
         acc_personal.express_outgoing_transfer(self.test_expense)
         self.assertEqual(
-            acc_personal.saldo,
+            acc_personal.balance,
             self.test_balance - self.test_expense - acc_personal.express_transfer_fee,
-            "Saldo się nie zgadza!",
+            "balance się nie zgadza!",
         )
         self.assertEqual(
             acc_personal.history,
@@ -133,13 +137,13 @@ class TestTransfers(unittest.TestCase):
             "Historia konta się nie zgadza!",
         )
         acc_company = AccountCompany(self.company_name, self.company_nip)
-        acc_company.saldo = self.test_balance
+        acc_company.balance = self.test_balance
         acc_company.history = []
         acc_company.express_outgoing_transfer(self.test_expense)
         self.assertEqual(
-            acc_company.saldo,
+            acc_company.balance,
             self.test_correct_balance - acc_company.express_transfer_fee,
-            f"Saldo się nie zgadza!",
+            f"balance się nie zgadza!",
         )
         self.assertEqual(
             acc_company.history,
@@ -149,21 +153,21 @@ class TestTransfers(unittest.TestCase):
 
     def test_express_invalid_transfer(self):
         acc_personal = AccountPersonal(self.name, self.last_name, self.pesel)
-        acc_personal.saldo = self.test_expense
+        acc_personal.balance = self.test_expense
         acc_personal.express_outgoing_transfer(self.test_expense)
         self.assertEqual(
-            acc_personal.saldo,
+            acc_personal.balance,
             self.test_expense,
-            "Saldo się nie zgadza!",
+            "balance się nie zgadza!",
         )
         self.assertEqual(acc_personal.history, [], "Historia się nie zgadza!"),
 
         acc_company = AccountCompany(self.company_name, self.company_nip)
-        acc_company.saldo = self.test_expense
+        acc_company.balance = self.test_expense
         acc_company.express_outgoing_transfer(self.test_expense)
         self.assertEqual(
-            acc_company.saldo,
+            acc_company.balance,
             self.test_expense,
-            f"Saldo się nie zgadza!",
+            f"balance się nie zgadza!",
         )
         self.assertEqual(acc_company.history, [], "Historia się nie zgadza!"),
