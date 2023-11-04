@@ -13,112 +13,37 @@ class TestCredits(unittest.TestCase):
     def setUp(self):
         self.acc_personal = AccountPersonal(self.name, self.last_name, self.pesel)
 
+    def check_balance(self, acc: AccountPersonal, balance):
+        self.assertEqual(
+            acc.saldo, balance, f"Balance is equal: {acc.saldo} instead of {balance}!"
+        )
+
+    def check_decision(self, decision, expected_decision):
+        self.assertEqual(
+            decision,
+            expected_decision,
+            f"Decision is {decision} instead of {expected_decision}",
+        )
+
     @parameterized.expand(
-        [([100, 100], 500, False, 0), ([-100, 100, 100, 100], 500, True, 500)]
+        [
+            ([], 1, False, 0),
+            ([100], 1, False, 0),
+            ([100, 100], 500, False, 0),
+            ([100, 100, 100], 100_000, True, 100_000),
+            ([100, 100, -100, 100], 100_000, False, 0),
+            ([-100, 100, 100, 100], 500, True, 500),
+            ([-100, 100, 100, 100], 0, False, 0),
+            ([-100, 100, 100, 100], -1, False, 0),
+            ([-100, 100, -100, 100], 1000, False, 0),
+            ([-500, -500, 1000, 1000, 1], 1000, True, 1000),
+            ([-500, -500, -500, -500, -500], 1000, False, 0),
+        ]
     )
     def test_taking_credits(
         self, history, credit_val, expected_decision, expected_balance
     ):
         self.acc_personal.history = history
         decision = self.acc_personal.take_credit(credit_val)
-        self.assertEqual(
-            decision,
-            expected_decision,
-            f"Expected desision should be: {expected_decision}",
-        )
-
-        self.assertEqual(
-            self.acc_personal.saldo,
-            expected_balance,
-            f"Balance should be equal to {expected_balance}",
-        )
-
-    def test_2_transfers(self):
-        self.acc_personal.history = [-100, 100]
-        decision = self.acc_personal.take_credit(self.example_credit)
-        self.assertEqual(
-            self.acc_personal.saldo,
-            0,
-            "Kredyt  został udzielony, a nie powinien!",
-        )
-        self.assertFalse(decision, "Decyzja powinna być negatywna!")
-
-    def test_3_incoming_transfers(self):
-        self.acc_personal.history = [-100, 100, 100, 100]
-        decision = self.acc_personal.take_credit(self.example_credit)
-        self.assertEqual(
-            self.acc_personal.saldo,
-            self.example_credit,
-            "Kredyt nie został udzielony, a powinien!",
-        )
-        self.assertTrue(decision, "Decyzja powinna być pozytywna!")
-
-    def test_3_incoming_transfers(self):
-        self.acc_personal.history = [-100, 100, 100, 100]
-        decision = self.acc_personal.take_credit(self.example_credit)
-        self.assertEqual(
-            self.acc_personal.saldo,
-            self.example_credit,
-            "Kredyt nie został udzielony, a powinien!",
-        )
-        self.assertTrue(decision, "Decyzja powinna być pozytywna!")
-
-    def test_mixed_transfers(self):
-        self.acc_personal.history = [-100, 100, -100, 100]
-        decision = self.acc_personal.take_credit(self.example_credit)
-        self.assertEqual(
-            self.acc_personal.saldo, 0, "Kredyt  został udzielony, a powinien!"
-        )
-        self.assertFalse(decision, "Decyzja powinna być negatywna!")
-
-    def test_five_last_positive_transactions(self):
-        self.acc_personal.history = [
-            -500,
-            -500,
-            1000,
-            self.example_credit,
-            1,
-        ]  # sum = 1001
-
-        decision = self.acc_personal.take_credit(self.example_credit)
-        self.assertEqual(
-            self.acc_personal.saldo,
-            self.example_credit,
-            "Kredyt nie został udzielony, a powinien!",
-        )
-        self.assertTrue(decision, "Decyzja powinna być pozytywna!")
-
-    def test_five_last_negative_transactions(self):
-        self.acc_personal.history = [-500, -500, -500, -500, -500]  # sum = 1
-
-        decision = self.acc_personal.take_credit(self.example_credit)
-        self.assertEqual(
-            self.acc_personal.saldo,
-            0,
-            "Kredyt  został udzielony, a nie powinien!",
-        )
-        self.assertFalse(decision, "Decyzja powinna być negatywna!")
-
-    def test_no_history_credit(self):
-        decision = self.acc_personal.take_credit(self.example_credit)
-        self.acc_personal.history = []
-        self.assertEqual(
-            self.acc_personal.saldo, 0, "Kredyt  został udzielony, a nie powinien!"
-        )
-        self.assertFalse(decision, "Decyzja powinna być negatywna!")
-
-    def test_negative_credit_amount(self):
-        decision = self.acc_personal.take_credit(-1)
-        self.acc_personal.history = []
-        self.assertEqual(
-            self.acc_personal.saldo, 0, "Kredyt  został udzielony, a nie powinien!"
-        )
-        self.assertFalse(decision, "Decyzja powinna być negatywna!")
-
-    def test_zero_credit_amount(self):
-        decision = self.acc_personal.take_credit(0)
-        self.acc_personal.history = []
-        self.assertEqual(
-            self.acc_personal.saldo, 0, "Kredyt  został udzielony, a nie powinien!"
-        )
-        self.assertFalse(decision, "Decyzja powinna być negatywna!")
+        self.check_decision(decision, expected_decision)
+        self.check_balance(self.acc_personal, expected_balance)
