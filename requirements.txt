@@ -1,1 +1,2 @@
 parameterized
+coverage==6.5.0
