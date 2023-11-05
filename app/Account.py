@@ -14,7 +14,11 @@ class Account:
             self.history.append(amount)
 
     def express_outgoing_transfer(self, amount):
-        if self.balance - (amount + self.express_transfer_fee) >= 0:
+        if (
+            self.balance - (amount + self.express_transfer_fee)
+            >= -self.express_transfer_fee
+            and amount > 0
+        ):
             self.balance -= amount + self.express_transfer_fee
             self.history.append(-amount)
             self.history.append(-self.express_transfer_fee)

@@ -27,6 +27,8 @@ class TestCompanyCredits(unittest.TestCase):
     @parameterized.expand(
         [
             ([], 0, 100, False, 0),
+            ([], 0, -100, False, 0),
+            
             ([], 200, 100, False, 200),
             ([100, 200, 300], 200, 100, False, 200),
             ([-100, 100], 200, 100, False, 200),
