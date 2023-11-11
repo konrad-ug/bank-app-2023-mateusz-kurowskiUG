@@ -1,3 +1,4 @@
+from typing import Self
 from .Account import Account
 
 
@@ -10,6 +11,15 @@ class AccountCompany(Account):
             self.nip = "Niepoprawny NIP!"
         else:
             self.nip = nip
+
+    def __eq__(self, __value: Self) -> bool:  # pragma: no cover
+        return (
+            self.balance == __value.balance
+            and self.name == __value.name
+            and self.express_transfer_fee == __value.express_transfer_fee
+            and self.history == __value.history
+            and self.nip == __value.nip
+        )
 
     def take_credit(self, amount):
         if amount <= 0:

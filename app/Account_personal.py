@@ -1,5 +1,10 @@
 import re, datetime
-from .Account import Account
+
+try:  # pragma: no cover
+    from typing import Self  # pragma: no cover
+except ImportError:  # pragma: no cover
+    from typing_extensions import Self  # pragma: no cover
+from .Account import Account  # pragma: no cover
 
 
 class AccountPersonal(Account):
@@ -15,6 +20,19 @@ class AccountPersonal(Account):
 
         if self.promoBank(promo_code):
             self.balance = 50
+
+    def __str__(self) -> str:  # pragma: no cover
+        return f"{self.name} {self.last_name} {self.balance}"
+
+    def __eq__(self, __value: Self) -> bool:  # pragma: no cover
+        return (
+            self.history == __value.history
+            and self.name == __value.name
+            and self.balance == __value.balance
+            and self.express_transfer_fee == __value.express_transfer_fee
+            and self.pesel == __value.pesel
+            and self.last_name == __value.last_name
+        )
 
     def czy_poprawny_promo_code(self, promo_code):
         return promo_code and re.match("^PROM_...$", promo_code) is not None
