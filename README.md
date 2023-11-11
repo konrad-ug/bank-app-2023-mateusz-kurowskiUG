@@ -4,3 +4,7 @@
 Imię i nazwisko: Mateusz Kurowski
 
 Grupa: III
+
+Project uses Poetry
+`Poetry install` to install dependencies
+`Poetry shell` to activate venv
