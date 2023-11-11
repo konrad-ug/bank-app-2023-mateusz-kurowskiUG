@@ -1,4 +1,5 @@
 import re, datetime
+from typing import Self
 from .Account import Account
 
 
@@ -15,6 +16,19 @@ class AccountPersonal(Account):
 
         if self.promoBank(promo_code):
             self.balance = 50
+
+    def __str__(self) -> str:  # pragma: no cover
+        return f"{self.name} {self.last_name} {self.balance}"
+
+    def __eq__(self, __value: Self) -> bool:  # pragma: no cover
+        return (
+            self.history == __value.history
+            and self.name == __value.name
+            and self.balance == __value.balance
+            and self.express_transfer_fee == __value.express_transfer_fee
+            and self.pesel == __value.pesel
+            and self.last_name == __value.last_name
+        )
 
     def czy_poprawny_promo_code(self, promo_code):
         return promo_code and re.match("^PROM_...$", promo_code) is not None
