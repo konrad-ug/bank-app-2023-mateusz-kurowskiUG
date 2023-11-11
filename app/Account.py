@@ -1,7 +1,7 @@
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
+try:  # pragma: no cover
+    from typing import Self  # pragma: no cover
+except ImportError:  # pragma: no cover
+    from typing_extensions import Self  # pragma: no cover
 
 
 class Account:

@@ -1,10 +1,10 @@
 import re, datetime
 
-try:
-    from typing import Self
-except ImportError:
-    from typing_extensions import Self
-from .Account import Account
+try:  # pragma: no cover
+    from typing import Self  # pragma: no cover
+except ImportError:  # pragma: no cover
+    from typing_extensions import Self  # pragma: no cover
+from .Account import Account  # pragma: no cover
 
 
 class AccountPersonal(Account):
