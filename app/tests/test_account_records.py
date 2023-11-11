@@ -13,9 +13,9 @@ class TestAccountRecords(unittest.TestCase):
 
 
     @classmethod
-    def SetUpClass(cls):
+    def setUpClass(cls):
         account = AccountPersonal(cls.name, cls.last_name, cls.pesel)
-
+        record = Accout
     def test_adding_accounts(self):
         ...
 
@@ -26,7 +26,7 @@ class TestAccountRecords(unittest.TestCase):
         ...
 
     def test_counting_accounts(self, accounts_to_add, expected_register):
-        ...
+        
 
     @classmethod
     def tearDownClass(cls):
