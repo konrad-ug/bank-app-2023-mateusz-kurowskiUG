@@ -78,7 +78,18 @@ files = [
 [package.extras]
 dev = ["jinja2"]
 
+[[package]]
+name = "typing-extensions"
+version = "4.8.0"
+description = "Backported and Experimental Type Hints for Python 3.8+"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "typing_extensions-4.8.0-py3-none-any.whl", hash = "sha256:8f92fc8806f9a6b641eaa5318da32b44d401efaac0f6678c9bc448ba3605faa0"},
+    {file = "typing_extensions-4.8.0.tar.gz", hash = "sha256:df8e4339e9cb77357558cbdbceca33c303714cf861d1eef15e1070055ae8b7ef"},
+]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "e8eef33d5dc8ac621989f947be8fe71fe9ad46c23072b61d03e8bd2b148016a3"
+content-hash = "40753af259cf5b8dd4b9b88f0822c50ea40fef84b1916b0fde7a43e934241c3b"

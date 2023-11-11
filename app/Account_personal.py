@@ -1,5 +1,9 @@
 import re, datetime
-from typing import Self
+
+try:
+    from typing import Self
+except ImportError:
+    from typing_extensions import Self
 from .Account import Account
 
 
