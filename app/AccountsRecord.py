@@ -23,6 +23,14 @@ class AccountsRecord:
         return found
 
     @classmethod
+    def modify_acc(cls, pesel, key, new_value):
+        found = cls.search_for_acc(pesel)
+        if found is not None:
+            found[key] = new_value
+            return found
+        return None
+
+    @classmethod
     def number_of_acc(
         cls,
     ):
@@ -30,5 +38,10 @@ class AccountsRecord:
 
     @classmethod
     def delete_acc(cls, pesel):
+        num_prev = cls.number_of_acc()
         filtered = list(filter(lambda x: x.pesel != pesel, cls.accounts))
         cls.accounts = filtered
+        num_curr = cls.number_of_acc()
+        if num_curr == num_prev:
+            return False
+        return True

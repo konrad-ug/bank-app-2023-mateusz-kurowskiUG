@@ -28,9 +28,6 @@ def get_accounts():
 @app.route("/api/accounts/<pesel>", methods=["GET"])
 def search_for_acc(pesel):
     response = AccountsRecord.search_for_acc(pesel)
-    app.logger.debug(response)
-    app.logger.debug(pesel)
-
     if response is not None:
         return jsonify(response.__dict__()), 200
     return jsonify({"message": "Nie znaleziono konta"}), 404
@@ -41,4 +38,24 @@ def update_acc(pesel):
     found = AccountsRecord.search_for_acc(pesel)
     if found is None:
         return jsonify("Nie znaleziono konta do modyfikacji!")
-    
+    data = request.get_json()
+    if "name" in data:
+        found.name = data["name"]
+    if "last_name" in data:
+        found.last_name = data["last_name"]
+    if "pesel" in data:
+        found.pesel = data["pesel"]
+    if "balance" in data:
+        found.balance = data["balance"]
+
+    return jsonify(found.__dict__()), 200
+
+
+@app.route("/api/accounts/<pesel>", methods=["DELETE"])
+def delete_acc(pesel):
+    if pesel is None:
+        return jsonify({"message": "Niewłaściwy pesel!"}), 404
+    result = AccountsRecord.delete_acc(pesel)
+    if result:
+        return jsonify({"message": "Konto usunięte"}), 200
+    return jsonify({"message": "Nie znaleziono konta"}), 404
