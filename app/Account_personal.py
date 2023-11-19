@@ -21,6 +21,15 @@ class AccountPersonal(Account):
         if self.promoBank(promo_code):
             self.balance = 50
 
+    def __dict__(self):
+        return {
+            "type": "Personal",
+            "name": self.name,
+            "last_name": self.last_name,
+            "pesel": self.pesel,
+            "balance": self.balance,
+        }
+
     def __str__(self) -> str:  # pragma: no cover
         return f"{self.name} {self.last_name} {self.balance}"
 

@@ -1,8 +1,15 @@
 from .Account_personal import AccountPersonal
+import json
 
 
 class AccountsRecord:
     accounts = []
+
+    def __dict__(self):
+        return [vars(i) for i in self.accounts]
+
+    def toJSON():
+        return json.dumps(cls, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
     @classmethod
     def add_acc_to_record(cls, acc):

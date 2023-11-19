@@ -22,7 +22,7 @@ def how_many_accs():
 
 @app.route("/api/accounts", methods=["GET"])
 def get_accounts():
-    return json_dumps(AccountsRecord.accounts), 200
+    return [i.__dict__() for i in AccountsRecord.accounts], 200
 
 
 @app.route("/api/accounts/<pesel>", methods=["GET"])
@@ -32,5 +32,13 @@ def search_for_acc(pesel):
     app.logger.debug(pesel)
 
     if response is not None:
-        return jsonify(response.__dict__), 200
+        return jsonify(response.__dict__()), 200
     return jsonify({"message": "Nie znaleziono konta"}), 404
+
+
+@app.route("/api/accounts/<pesel>", methods=["PATCH"])
+def update_acc(pesel):
+    found = AccountsRecord.search_for_acc(pesel)
+    if found is None:
+        return jsonify("Nie znaleziono konta do modyfikacji!")
+    

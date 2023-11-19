@@ -12,6 +12,13 @@ class AccountCompany(Account):
         else:
             self.nip = nip
 
+    def __dict__(self):
+        return {
+            "name": self.name,
+            "nip": self.nip,
+            "balance": self.balance,
+        }
+
     def __eq__(self, __value: Self) -> bool:  # pragma: no cover
         return (
             self.balance == __value.balance
