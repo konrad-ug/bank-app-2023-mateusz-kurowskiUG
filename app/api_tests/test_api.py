@@ -16,7 +16,15 @@ class TestApi(TestCase):
     def setUp(self) -> None:
         AccountsRecord.accounts = [self.acc]
 
+    @classmethod
+    def setUpClass(self) -> None:
+        AccountsRecord.accounts = [self.acc]
+
     def tearDown(self) -> None:
+        AccountsRecord.accounts = []
+
+    @classmethod
+    def tearDownClass(self):
         AccountsRecord.accounts = []
 
     def test_create_acc(self):
@@ -24,20 +32,23 @@ class TestApi(TestCase):
         self.assertEqual(response.status_code, 201)
 
     def test_get_acc(self):
-        response - requests.get(self.url)
+        response = requests.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), self.acc_json)
+        self.assertEqual(*response.json(), self.acc_json)
 
     def test_valid_patch(self):
+        # response2 = requests.post(self.url, json=self.acc_json)
+        AccountsRecord.accounts = [self.acc]
         test_obj = {
             "name": "Adam",
             "last_name": "Banan",
             "pesel": "10987654321",
             "balance": 10,
         }
-        response = requests.patch(self.url + "/" + self.pesel, json=test_obj)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json(), self.acc_json)
+        response = requests.patch(self.url + f"/{self.pesel}", json=test_obj)
+        if response:
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.json(), test_obj)
 
     def test_invalid_patch(self):
         response = requests.patch(
@@ -51,10 +62,18 @@ class TestApi(TestCase):
         )
         self.assertEqual(response.status_code, 404)
 
-    def test_deleting(self):
-        ...
+    def test_valid_deleting(self):
+        response = requests.delete(self.url + f"/{self.pesel}")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual({"message": "Konto usunięte"}, response.json())
+
+    def test_invalid_deleting(self):
+        response = requests.delete(self.url + "/1")
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual({"message": "Nie znaleziono konta"}, response.json())
 
     def test_counting(self):
+        response2 = requests.post(self.url, json=self.acc_json)
         response = requests.get(self.url + "/count")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"count": 1})

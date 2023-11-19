@@ -37,7 +37,7 @@ def search_for_acc(pesel):
 def update_acc(pesel):
     found = AccountsRecord.search_for_acc(pesel)
     if found is None:
-        return jsonify("Nie znaleziono konta do modyfikacji!")
+        return jsonify("Nie znaleziono konta do modyfikacji!"), 404
     data = request.get_json()
     if "name" in data:
         found.name = data["name"]

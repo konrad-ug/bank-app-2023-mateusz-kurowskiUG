@@ -23,7 +23,7 @@ class AccountPersonal(Account):
 
     def __dict__(self):
         return {
-            "type": "Personal",
+            # "type": "Personal",
             "name": self.name,
             "last_name": self.last_name,
             "pesel": self.pesel,
