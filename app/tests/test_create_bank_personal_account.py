@@ -4,6 +4,32 @@ from ..Account_personal import AccountPersonal
 from ..Account_company import AccountCompany
 
 
+class TestBasicPersonalMethods(unittest.TestCase):
+    name = "Jan"
+    last_name = "Kowalski"
+    pesel = "71081619681"
+    balance = 0
+    acc = AccountPersonal(name, last_name, pesel)
+
+    def test_dict(self):
+        dicted = {
+            "name": self.name,
+            "last_name": self.last_name,
+            "pesel": self.pesel,
+            "balance": self.balance,
+        }
+        self.assertEqual(self.acc.__dict__(), dicted, "__dict__ did't work!")
+
+    def test_str(self):
+        self.assertEqual(
+            self.acc.__str__(), f"{self.acc.name} {self.last_name} {self.balance}"
+        )
+
+    def test_equal(self):
+        second_acc = AccountPersonal(self.name, self.last_name, self.pesel)
+        self.assertEqual(self.acc, second_acc, "__eq__ does not work!")
+
+
 class TestCreateBankAccountPersonal(unittest.TestCase):
     def check_names(self, acc: AccountPersonal, name, last_name):
         self.assertEqual(acc.name, name, f"Name is equal {acc.name} instead of {name}!")

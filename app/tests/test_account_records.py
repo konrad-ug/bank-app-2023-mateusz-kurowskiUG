@@ -2,12 +2,15 @@ import unittest
 from parameterized import *
 from ..AccountsRecord import AccountsRecord
 from ..Account_personal import AccountPersonal
+import copy
 
 
 class TestAccountRecords(unittest.TestCase):
     name = "Jan"
     last_name = "Kowalski"
     pesel = "65112238477"
+    second_pesel = "71081619681"
+    dicted = {"name": name, "last_name": last_name, "pesel": pesel, "balance": 0}
 
     @classmethod
     def setUpClass(cls):
@@ -70,6 +73,17 @@ class TestAccountRecords(unittest.TestCase):
     def test_counting_accounts(self):
         lenght_of_AR = len(AccountsRecord.accounts)
         self.assertEqual(lenght_of_AR, AccountsRecord.number_of_acc())
+
+    def test_modyfying_valid_account(self):
+        test_acc = AccountPersonal(self.name, self.last_name, self.second_pesel)
+        updated = AccountsRecord.modify_acc(self.pesel, "pesel", self.second_pesel)
+        self.assertEqual(updated, test_acc, "Modyfying acc does not work!")
+
+    def test_modyfying_invalid_account(self):
+        updated = AccountsRecord.modify_acc("pesel", "pesel", self.second_pesel)
+        self.assertEqual(
+            updated, None, "Modyfying acc does not work! Found some fake acc!"
+        )
 
     @classmethod
     def tearDownClass(cls):

@@ -1,4 +1,5 @@
 import re, datetime
+from typing import Any
 
 try:  # pragma: no cover
     from typing import Self  # pragma: no cover
@@ -30,10 +31,10 @@ class AccountPersonal(Account):
             "balance": self.balance,
         }
 
-    def __str__(self) -> str:  # pragma: no cover
+    def __str__(self) -> str:
         return f"{self.name} {self.last_name} {self.balance}"
 
-    def __eq__(self, __value: Self) -> bool:  # pragma: no cover
+    def __eq__(self, __value: Self) -> bool:
         return (
             self.history == __value.history
             and self.name == __value.name
@@ -49,11 +50,10 @@ class AccountPersonal(Account):
     def validate_pesel(self, pesel):
         if len(pesel) != 11:
             return False
-        else:
-            found_year = self.znajdz_rok_urodzenia(pesel)
-            if found_year is None or found_year > datetime.date.today().year:
-                return False
-            return True
+        found_year = self.znajdz_rok_urodzenia(pesel)
+        if found_year is None or found_year > datetime.date.today().year:
+            return False
+        return True
 
     def znajdz_rok_urodzenia(self, pesel):
         match pesel[2]:

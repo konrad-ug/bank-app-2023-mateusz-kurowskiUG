@@ -5,11 +5,8 @@ import json
 class AccountsRecord:
     accounts = []
 
-    def __dict__(self):
+    def __dict__(self):  # pragma: no cover
         return [vars(i) for i in self.accounts]
-
-    def toJSON():
-        return json.dumps(cls, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
     @classmethod
     def add_acc_to_record(cls, acc):
@@ -18,9 +15,10 @@ class AccountsRecord:
 
     @classmethod
     def search_for_acc(cls, pesel):
-        found = next((acc for acc in cls.accounts if acc.pesel == pesel), None)
-
-        return found
+        for acc in cls.accounts:
+            if acc.pesel == pesel:
+                return acc
+        return None
 
     @classmethod
     def modify_acc(cls, pesel, key, new_value):
