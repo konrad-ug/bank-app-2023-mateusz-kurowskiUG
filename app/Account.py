@@ -1,3 +1,6 @@
+from typing import Any
+
+
 try:  # pragma: no cover
     from typing import Self  # pragma: no cover
 except ImportError:  # pragma: no cover
@@ -8,6 +11,12 @@ class Account:
     balance = 0
     express_transfer_fee = 0
     history = []
+
+    def __setitem__(self, __name: str, __value: Any):
+        setattr(self, __name, __value)
+
+    def __getitem__(self, __name: str) -> Any:
+        return getattr(self, __name)
 
     def __eq__(self, __value: Self) -> bool:  # pragma: no cover
         return (
