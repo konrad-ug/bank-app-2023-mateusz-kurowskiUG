@@ -13,3 +13,5 @@ Project uses Poetry
 `python3 -m coverage report` coverage
 `python3 -m coverage html`
 `flask --app app/api.py --debug run`
+`python -m unittest discover app.tests` to SKIP api_tests
+Maybe mock api?

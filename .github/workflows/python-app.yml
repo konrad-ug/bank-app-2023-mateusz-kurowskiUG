@@ -38,6 +38,7 @@ jobs:
           flask --app app/api.py --debug run
       - name: Test with Unittest and Coverage
         run: |
-          python3 -m unittest
+          # python3 -m unittest
+          python -m unittest discover app.tests
           python3 -m coverage run -m unittest
           python3 -m coverage report --fail-under=100
