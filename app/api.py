@@ -20,7 +20,7 @@ def add_acc():
     if found is None:
         acc = AccountPersonal(name, last_name, pesel)
         AccountsRecord.add_acc_to_record(acc)
-        return jsonify({"message": "Konto stworzone"}), 201
+        return jsonify(acc.__dict__()), 201
     else:
         return jsonify({"message": "Pesel should be UNIQUE!"}), 409
 

@@ -14,56 +14,51 @@ class TestApi(TestCase):
     pesel = "07303157776"
     second_pesel = "71081619681"
     url = "http://localhost:5000/api/accounts"
-    acc = AccountPersonal(name, last_name, pesel)
-    acc_json = acc.__dict__()
+    acc_json = AccountPersonal(name, last_name, pesel).__dict__()
 
-    @classmethod
-    def setUpClass(cls):
-        AccountsRecord.accounts = [cls.acc]
-
-    def setUp(self):
-        AccountsRecord.accounts = [self.acc]
-
-    def tearDown(self) -> None:
-        AccountsRecord.accounts = []
-
-    @classmethod
-    def tearDownClass(cls):
-        AccountsRecord.accounts = []
-
-    def test_create_acc(self):
+    def test_01_create_acc(self):
         response = requests.post(self.url, json=self.acc_json)
         self.assertEqual(response.status_code, 201, f"{response.text}")
+        self.assertEqual(
+            response.json(),
+            self.acc_json,
+            "POST returned something different than original object!",
+        )
 
-        new_acc = {
-            "name": "Jan",
-            "last_name": "Kowalski",
-            "pesel": self.second_pesel,
-        }
+    def test_02_create_acc_already_exists(self):
         response = requests.post(self.url, json=self.acc_json)
         self.assertEqual(response.status_code, 409, "Acc should not be created!")
-        response = requests.delete(self.url + "/" + self.second_pesel)
-        response = requests.delete(self.url + "/" + self.pesel)
 
-    def test_get_acc(self):
+    def test_03_get_all_acc(self):
         response = requests.get(self.url)
         self.assertEqual(response.status_code, 200, "GET NOT WORKING!")
+        self.assertEqual(
+            response.json(),
+            [self.acc_json],
+            "GET response is different than posted object in array.",
+        )
 
-    def test_valid_patch(self):
-        response = requests.post(self.url, json=self.acc_json)
+    def test_04_get_acc_by_pesel(self):
+        response = requests.get(self.url + "/" + self.pesel)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json(), self.acc_json, "GET returned different object!"
+        )
+
+    def test_05_valid_patch(self):
         test_obj = {
             "name": "Adam",
             "last_name": "Banan",
             "pesel": self.second_pesel,
             "balance": 10,
         }
-        response = requests.patch(self.url + "/" + self.acc.pesel, json=test_obj)
+        response = requests.patch(self.url + "/" + self.pesel, json=test_obj)
         self.assertEqual(response.status_code, 200, "Patch should be executed!")
-        response = requests.delete(self.url + "/" + self.second_pesel)
+        self.assertEqual(response.json(), test_obj, "Object didn't get changed!")
 
-    def test_invalid_patch(self):
+    def test_06_invalid_patch(self):
         response = requests.patch(
-            self.url + "/",
+            self.url + "/111111111111111111111111",
             json={
                 "name": "Adam",
                 "last_name": "Banan",
@@ -73,29 +68,19 @@ class TestApi(TestCase):
         )
         self.assertEqual(response.status_code, 404)
 
-    def test_valid_deleting(self):
-        response = requests.post(self.url, json=self.acc_json)
-
-        response = requests.delete(self.url + f"/{self.pesel}")
+    def test_07_valid_deleting(self):
+        response = requests.delete(self.url + f"/{self.second_pesel}")
         self.assertEqual(response.status_code, 200)
 
-    def test_invalid_deleting(self):
+    def test_08_invalid_deleting(self):
         response = requests.delete(self.url + "/1")
         self.assertEqual(response.status_code, 404)
 
-    def test_counting(self):
+    def test_09_counting(self):
         response = requests.get(self.url + "/count")
-        print(AccountsRecord.accounts)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"count": 0}, "Counter does not work!")
 
-    def test_finding_valid_acc(self):
-        response = requests.post(self.url, json=self.acc_json)
-
-        response = requests.get(self.url + "/" + self.pesel)
-        self.assertEqual(response.status_code, 200)
-        response = requests.delete(self.url + "/" + self.pesel)
-
-    def test_finding_invalid_acc(self):
+    def test_10_finding_invalid_acc(self):
         response = requests.get(self.url + "/" + "1")
         self.assertEqual(response.status_code, 404)
-
