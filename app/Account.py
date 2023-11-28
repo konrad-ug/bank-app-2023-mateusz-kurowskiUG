@@ -12,10 +12,10 @@ class Account:
     express_transfer_fee = 0
     history = []
 
-    def __setitem__(self, __name: str, __value: Any):
+    def __setitem__(self, __name: str, __value: Any):  # pragma: no cover
         setattr(self, __name, __value)
 
-    def __getitem__(self, __name: str) -> Any:
+    def __getitem__(self, __name: str) -> Any:  # pragma: no cover
         return getattr(self, __name)
 
     def __eq__(self, __value: Self) -> bool:  # pragma: no cover
@@ -25,15 +25,19 @@ class Account:
             and self.history == __value.history
         )
 
-    def outing_transfer(self, amount: float):
+    def outgoing_transfer(self, amount: float):
         if self.balance >= amount and amount > 0:
             self.balance -= amount
             self.history.append(-amount)
+            return True
+        return False
 
     def receive_transfer(self, amount):
         if amount > 0:
             self.balance += amount
             self.history.append(amount)
+            return True
+        return False
 
     def express_outgoing_transfer(self, amount):
         if (

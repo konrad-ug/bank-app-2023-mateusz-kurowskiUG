@@ -21,12 +21,13 @@ class AccountsRecord:
         return None
 
     @classmethod
-    def modify_acc(cls, pesel, key, new_value):
+    def modify_acc(cls, pesel, obj_props):
         found = cls.search_for_acc(pesel)
-        if found is not None:
-            found[key] = new_value
-            return found
-        return None
+        if found is None:
+            return None
+        for key, item in obj_props.items():
+            found[f"{key}"] = item
+        return found
 
     @classmethod
     def number_of_acc(

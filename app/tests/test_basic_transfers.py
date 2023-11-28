@@ -65,20 +65,20 @@ class TestBasicTransfers(unittest.TestCase):
                 self.acc_company, expected_balance, expected_history
             )
         elif transfer_val < 0:
-            self.acc_personal.outing_transfer(-transfer_val)
-            self.acc_personal.outing_transfer(transfer_val)
+            self.acc_personal.outgoing_transfer(-transfer_val)
+            self.acc_personal.outgoing_transfer(transfer_val)
             self.compare_balance_and_history(
                 self.acc_personal, expected_balance, expected_history
             )
-            self.acc_company.outing_transfer(-transfer_val)
-            self.acc_company.outing_transfer(transfer_val)
+            self.acc_company.outgoing_transfer(-transfer_val)
+            self.acc_company.outgoing_transfer(transfer_val)
             self.compare_balance_and_history(
                 self.acc_company, expected_balance, expected_history
             )
         else:
             self.acc_personal.receive_transfer(transfer_val)
-            self.acc_personal.outing_transfer(transfer_val)
+            self.acc_personal.outgoing_transfer(transfer_val)
             self.acc_company.receive_transfer(transfer_val)
-            self.acc_company.outing_transfer(transfer_val)
+            self.acc_company.outgoing_transfer(transfer_val)
             self.compare_balance_and_history(self.acc_personal, expected_balance, [])
             self.compare_balance_and_history(self.acc_company, expected_balance, [])
