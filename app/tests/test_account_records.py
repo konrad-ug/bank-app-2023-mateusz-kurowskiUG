@@ -75,12 +75,13 @@ class TestAccountRecords(unittest.TestCase):
         self.assertEqual(lenght_of_AR, AccountsRecord.number_of_acc())
 
     def test_modyfying_valid_account(self):
-        test_acc = AccountPersonal(self.name, self.last_name, self.second_pesel)
-        updated = AccountsRecord.modify_acc(self.pesel, "pesel", self.second_pesel)
-        self.assertEqual(updated, test_acc, "Modyfying acc does not work!")
+        test_props = {"name": "Ja", "last_name": "Kowalsk", "pesel": "65112238478"}
+        result = AccountPersonal(**test_props)
+        updated = AccountsRecord.modify_acc(self.pesel, test_props)
+        self.assertEqual(updated, result, "Account hasn't been updated!")
 
     def test_modyfying_invalid_account(self):
-        updated = AccountsRecord.modify_acc("pesel", "pesel", self.second_pesel)
+        updated = AccountsRecord.modify_acc("pesel", {"name": "brak"})
         self.assertEqual(
             updated, None, "Modyfying acc does not work! Found some fake acc!"
         )

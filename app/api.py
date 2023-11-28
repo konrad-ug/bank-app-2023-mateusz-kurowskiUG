@@ -9,9 +9,20 @@ app = Flask(__name__)
 @app.route("/api/accounts", methods=["POST"])
 def add_acc():
     data = request.get_json()
-    acc = AccountPersonal(data["name"], data["last_name"], data["pesel"])
-    AccountsRecord.add_acc_to_record(acc)
-    return jsonify({"message": "Konto stworzone"}), 201
+    name = data["name"]
+    last_name = data["last_name"]
+    pesel = data["pesel"]
+
+    if not name or not last_name or not pesel:
+        return "Seems like you didn't provide name, last_name or pesel", 403
+
+    found = AccountsRecord.search_for_acc(pesel)
+    if found is None:
+        acc = AccountPersonal(name, last_name, pesel)
+        AccountsRecord.add_acc_to_record(acc)
+        return jsonify({"message": "Konto stworzone"}), 201
+    else:
+        return jsonify({"message": "Pesel should be UNIQUE!"}), 409
 
 
 @app.route("/api/accounts/count", methods=["GET"])
@@ -34,22 +45,28 @@ def search_for_acc(pesel):
 
 @app.route("/api/accounts/<pesel>", methods=["PATCH"])
 def update_acc(pesel):
-    found = AccountsRecord.search_for_acc(pesel)
-    print(AccountsRecord.accounts)
-    print(found)
-    if found is None:
-        return jsonify("Nie znaleziono konta do modyfikacji!"), 404
+    if pesel is None:
+        return jsonify({"message": "Niewłaściwy pesel!"}), 404
+
     data = request.get_json()
-    if "name" in data:
-        found.name = data["name"]
-    if "last_name" in data:
-        found.last_name = data["last_name"]
-    if "pesel" in data:
-        found.pesel = data["pesel"]
-    if "balance" in data:
-        found.balance = data["balance"]
-    print(found)
-    return jsonify(found.__dict__()), 200
+    obj = {}
+
+    if "name" in data and data["name"]:
+        obj["name"] = data["name"]
+
+    if "last_name" in data and data["last_name"]:
+        obj["last_name"] = data["last_name"]
+
+    if "pesel" in data and data["pesel"]:
+        obj["pesel"] = data["pesel"]
+
+    if "balance" in data and data["balance"]:
+        obj["balance"] = data["balance"]
+
+    result = AccountsRecord.modify_acc(pesel, obj)
+    if result is None:
+        return jsonify({"message": "Account not found!"}), 404
+    return result.__dict__(), 200
 
 
 @app.route("/api/accounts/<pesel>", methods=["DELETE"])
