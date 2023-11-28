@@ -77,3 +77,31 @@ def delete_acc(pesel):
     if result:
         return jsonify({"message": "Konto usunięte"}), 200
     return jsonify({"message": "Nie znaleziono konta"}), 404
+
+
+@app.route("/api/accounts/<pesel>/transfer", methods=["POST"])
+def transfer(pesel):
+    data = request.get_json()
+
+    if pesel is None:
+        return jsonify({"message": "No pesel provided!"}), 404
+
+    amount = data["amount"]
+    transfer_type = data["type"]
+    if not amount or not transfer_type:
+        return jsonify({"message": "No amount or type provided!"}), 404
+
+    found_acc = AccountsRecord.search_for_acc(pesel)
+    if found_acc is None:
+        return jsonify({"message": "Couldn't find acc with such a pesel!"}), 404
+
+    match transfer_type:
+        case "incoming":
+            x = found_acc.receive_transfer(amount)
+            print(x)
+        case "outgoing":
+            found_acc.outgoing_transfer(amount)
+
+        case _:
+            return jsonify({"message": "wrong type of transfer"}), 403
+    return jsonify({"message": "Zlecenie przyjęte do realizacji!"}), 200

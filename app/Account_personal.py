@@ -22,12 +22,6 @@ class AccountPersonal(Account):
         if self.promoBank(promo_code):
             self.balance = 50
 
-    def __setitem__(self, __name: str, __value: Any):
-        setattr(self, __name, __value)
-
-    def __getitem__(self, __name: str) -> Any:
-        return getattr(self, __name)
-
     def __dict__(self):
         return {
             # "type": "Personal",

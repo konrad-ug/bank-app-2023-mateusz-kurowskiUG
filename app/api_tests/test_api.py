@@ -98,3 +98,37 @@ class TestApi(TestCase):
     def test_finding_invalid_acc(self):
         response = requests.get(self.url + "/" + "1")
         self.assertEqual(response.status_code, 404)
+
+    def test_valid_incoming_transfer(self):
+        requests.post(self.url, json=self.acc_json)
+        body = {"amount": 50, "type": "incoming"}
+        transfer = requests.post(self.url + f"/{self.pesel}/transfer", json=body)
+        found = requests.get(self.url + f"/{self.pesel}")
+        self.assertEqual(transfer.status_code, 200, "transfer not executed!")
+        self.assertEqual(
+            found.json()["balance"], body["amount"], "transfer not received!"
+        )
+
+    def test_invalid_incoming_transfer(self):
+        body = {"amount": 50, "type": "incoming"}
+        transfer = requests.post(self.url + f"/{111}/transfer", json=body)
+        found = requests.get(self.url + f"/{111}")
+        self.assertEqual(transfer.status_code, 404, "transfer shouldn't be executed!")
+        self.assertEqual(found.status_code, 404, "Acc shouldn't be found!")
+
+    def test_invalid_outgoing_transfer(self):
+        requests.post(self.url, json=self.acc_json)
+        body = {"amount": 50, "type": "outgoing"}
+        transfer = requests.post(self.url + f"/{self.pesel}/transfer", json=body)
+        found = requests.get(self.url + f"/{self.pesel}")
+        self.assertEqual(transfer.status_code, 200, "transfer not executed!")
+        self.assertEqual(found.json()["balance"], 0, "transfer not received!")
+
+    def test_valid_outgoing_transfer(self):
+        requests.post(self.url, json=self.acc_json)
+        body = {"amount": 50, "type": "outgoing"}
+        requests.patch(self.url + f"/{self.pesel}", json={"balance": 100})
+        transfer = requests.post(self.url + f"/{self.pesel}/transfer", json=body)
+        found = requests.get(self.url + f"/{self.pesel}")
+        self.assertEqual(transfer.status_code, 200, "transfer not executed!")
+        self.assertEqual(found.json()["balance"], 50, "outgoing transfer not executed!")
