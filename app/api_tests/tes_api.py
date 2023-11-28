@@ -41,7 +41,7 @@ class TestApi(TestCase):
             "pesel": self.second_pesel,
         }
         response = requests.post(self.url, json=self.acc_json)
-        self.assertEqual(response.status_code, 409, "Acc should be created!")
+        self.assertEqual(response.status_code, 409, "Acc should not be created!")
         response = requests.delete(self.url + "/" + self.second_pesel)
         response = requests.delete(self.url + "/" + self.pesel)
 
