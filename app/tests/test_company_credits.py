@@ -1,13 +1,15 @@
-import unittest
-from ..Account_company import AccountCompany
+from unittest import TestCase, mock
+from app.Account_company import AccountCompany
 from parameterized import *
 
 
-class TestCompanyCredits(unittest.TestCase):
+class TestCompanyCredits(TestCase):
     name = "Company"
-    nip = "1234567890"
+    nip = "8461627563"
 
-    def setUp(self):
+    @mock.patch("app.Account_company.AccountCompany.validate_nip")
+    def setUp(self, mock_object):
+        mock_object.return_value = True
         self.acc_company = AccountCompany(self.name, self.nip)
 
     def check_balance(self, acc: AccountCompany, balance):
@@ -28,7 +30,7 @@ class TestCompanyCredits(unittest.TestCase):
         [
             ([], 0, 100, False, 0),
             ([], 0, -100, False, 0),
-            
+
             ([], 200, 100, False, 200),
             ([100, 200, 300], 200, 100, False, 200),
             ([-100, 100], 200, 100, False, 200),

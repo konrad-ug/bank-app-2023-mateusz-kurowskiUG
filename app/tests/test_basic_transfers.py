@@ -1,10 +1,10 @@
-import unittest
+from unittest import mock, TestCase
 from parameterized import *
-from ..Account_company import AccountCompany
-from ..Account_personal import AccountPersonal
+from app.Account_company import AccountCompany
+from app.Account_personal import AccountPersonal
 
 
-class TestBasicTransfers(unittest.TestCase):
+class TestBasicTransfers(TestCase):
     personal_data = {
         "name": "Antoni",
         "last_name": "Krawczyk",
@@ -13,7 +13,9 @@ class TestBasicTransfers(unittest.TestCase):
     }
     company_data = {"name": "Mateusz", "nip": "1234567890"}
 
-    def setUp(self):
+    @mock.patch("app.Account_company.AccountCompany.validate_nip")
+    def setUp(self, mock_object):
+        mock_object.return_value = True
         self.acc_personal = AccountPersonal(**self.personal_data)
         self.acc_personal.history = []
         self.acc_company = AccountCompany(**self.company_data)
@@ -80,5 +82,7 @@ class TestBasicTransfers(unittest.TestCase):
             self.acc_personal.outgoing_transfer(transfer_val)
             self.acc_company.receive_transfer(transfer_val)
             self.acc_company.outgoing_transfer(transfer_val)
-            self.compare_balance_and_history(self.acc_personal, expected_balance, [])
-            self.compare_balance_and_history(self.acc_company, expected_balance, [])
+            self.compare_balance_and_history(
+                self.acc_personal, expected_balance, [])
+            self.compare_balance_and_history(
+                self.acc_company, expected_balance, [])

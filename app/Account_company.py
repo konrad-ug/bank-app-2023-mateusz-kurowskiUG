@@ -1,5 +1,10 @@
 from typing import Self
-from .Account import Account
+from app.Account import Account
+import datetime
+import requests
+
+MF_PROD = 'https://wl-api.mf.gov.pl/'
+MF_TEST = 'https://wl-test.mf.gov.pl/'
 
 
 class AccountCompany(Account):
@@ -10,7 +15,10 @@ class AccountCompany(Account):
         if len(nip) != 10:
             self.nip = "Niepoprawny NIP!"
         else:
-            self.nip = nip
+            if self.validate_nip(nip):
+                self.nip = nip
+            else:
+                raise ValueError
 
     def __str__(self):
         return f"{self.name} {self.nip} {self.balance}"
@@ -30,6 +38,13 @@ class AccountCompany(Account):
             and self.history == __value.history
             and self.nip == __value.nip
         )
+
+    def validate_nip(self, nip, BANK_APP_MF_URL=MF_TEST):
+        date = datetime.datetime.today().strftime('%Y-%m-%d')
+        response = requests.get(
+            f"{BANK_APP_MF_URL}/api/search/nip/{nip}", params={"date": date})
+        print(response.text)
+        return response.status_code == 200
 
     def take_credit(self, amount):
         if amount <= 0:

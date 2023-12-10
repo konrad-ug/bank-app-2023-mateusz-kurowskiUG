@@ -1,4 +1,4 @@
-from .Account_personal import AccountPersonal
+from app.Account_personal import AccountPersonal
 import json
 
 
