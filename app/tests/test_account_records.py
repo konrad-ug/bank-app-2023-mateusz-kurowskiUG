@@ -1,7 +1,7 @@
 import unittest
 from parameterized import *
-from ..AccountsRecord import AccountsRecord
-from ..Account_personal import AccountPersonal
+from app.AccountsRecord import AccountsRecord
+from app.Account_personal import AccountPersonal
 import copy
 
 
@@ -10,7 +10,8 @@ class TestAccountRecords(unittest.TestCase):
     last_name = "Kowalski"
     pesel = "65112238477"
     second_pesel = "71081619681"
-    dicted = {"name": name, "last_name": last_name, "pesel": pesel, "balance": 0}
+    dicted = {"name": name, "last_name": last_name,
+              "pesel": pesel, "balance": 0}
 
     @classmethod
     def setUpClass(cls):
@@ -31,7 +32,8 @@ class TestAccountRecords(unittest.TestCase):
         self.assertEqual(
             AccountsRecord.number_of_acc(),
             len(AccountsRecord.accounts),
-            f"The length of accouts does not match value {AccountsRecord.number_of_acc()}",
+            f"The length of accouts does not match value {
+                AccountsRecord.number_of_acc()}",
         )
 
     def test_searching_valid_account(self):
@@ -42,17 +44,20 @@ class TestAccountRecords(unittest.TestCase):
             self.assertEqual(
                 found.name,
                 self.acc.name,
-                f"Found acc name: {found.name} does not match with {self.acc.name}",
+                f"Found acc name: {found.name} does not match with {
+                    self.acc.name}",
             )
             self.assertEqual(
                 found.last_name,
                 self.acc.last_name,
-                f"Found acc last name: {found.last_name} does not match with {self.acc.last_name}",
+                f"Found acc last name: {found.last_name} does not match with {
+                    self.acc.last_name}",
             )
             self.assertEqual(
                 found.pesel,
                 self.acc.pesel,
-                f"Found acc pesel: {found.pesel} does not match with {self.acc.pesel}",
+                f"Found acc pesel: {found.pesel} does not match with {
+                    self.acc.pesel}",
             )
 
     def test_searching_invalid_account(self):
@@ -61,7 +66,8 @@ class TestAccountRecords(unittest.TestCase):
 
     def test_deleting_valid_account(self):
         AccountsRecord.delete_acc(self.acc.pesel)
-        self.assertEqual(AccountsRecord.accounts, [], f"record should be empty!")
+        self.assertEqual(AccountsRecord.accounts, [],
+                         f"record should be empty!")
 
     def test_deleting_invalid_account(self):
         prev_record = AccountsRecord.accounts
@@ -75,7 +81,8 @@ class TestAccountRecords(unittest.TestCase):
         self.assertEqual(lenght_of_AR, AccountsRecord.number_of_acc())
 
     def test_modyfying_valid_account(self):
-        test_props = {"name": "Ja", "last_name": "Kowalsk", "pesel": "65112238478"}
+        test_props = {"name": "Ja",
+                      "last_name": "Kowalsk", "pesel": "65112238478"}
         result = AccountPersonal(**test_props)
         updated = AccountsRecord.modify_acc(self.pesel, test_props)
         self.assertEqual(updated, result, "Account hasn't been updated!")
