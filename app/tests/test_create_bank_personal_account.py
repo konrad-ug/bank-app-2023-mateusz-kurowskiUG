@@ -1,7 +1,7 @@
 import unittest
 from parameterized import *
-from ..Account_personal import AccountPersonal
-from ..Account_company import AccountCompany
+from app.Account_personal import AccountPersonal
+from app.Account_company import AccountCompany
 
 
 class TestBasicPersonalMethods(unittest.TestCase):
@@ -22,7 +22,8 @@ class TestBasicPersonalMethods(unittest.TestCase):
 
     def test_str(self):
         self.assertEqual(
-            self.acc.__str__(), f"{self.acc.name} {self.last_name} {self.balance}"
+            self.acc.__str__(), f"{self.acc.name} {
+                self.last_name} {self.balance}"
         )
 
     def test_equal(self):
@@ -32,7 +33,8 @@ class TestBasicPersonalMethods(unittest.TestCase):
 
 class TestCreateBankAccountPersonal(unittest.TestCase):
     def check_names(self, acc: AccountPersonal, name, last_name):
-        self.assertEqual(acc.name, name, f"Name is equal {acc.name} instead of {name}!")
+        self.assertEqual(acc.name, name, f"Name is equal {
+                         acc.name} instead of {name}!")
         self.assertEqual(
             acc.last_name,
             last_name,
@@ -91,7 +93,8 @@ class TestCreateBankAccountPersonal(unittest.TestCase):
         valid_balance=0,
         promo_code=None,
     ):
-        acc_personal = AccountPersonal(first_name, last_name, pesel, promo_code)
+        acc_personal = AccountPersonal(
+            first_name, last_name, pesel, promo_code)
         self.check_names(acc_personal, first_name, last_name)
         self.check_pesel(acc_personal, pesel, is_pesel_valid)
         self.check_balance(acc_personal, valid_balance)

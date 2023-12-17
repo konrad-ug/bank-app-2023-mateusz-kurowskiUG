@@ -1,5 +1,5 @@
 import unittest
-from ..Account_personal import AccountPersonal
+from app.Account_personal import AccountPersonal
 from parameterized import *
 
 
@@ -9,7 +9,8 @@ class TestPersonalCredits(unittest.TestCase):
     pesel = "12345678901"
 
     def setUp(self):
-        self.acc_personal = AccountPersonal(self.name, self.last_name, self.pesel)
+        self.acc_personal = AccountPersonal(
+            self.name, self.last_name, self.pesel)
 
     def check_balance(self, acc: AccountPersonal, balance):
         self.assertEqual(

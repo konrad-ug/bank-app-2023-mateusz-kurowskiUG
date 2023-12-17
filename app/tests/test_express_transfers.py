@@ -1,10 +1,10 @@
-import unittest
+from unittest import mock, TestCase
 from parameterized import *
-from ..Account_company import AccountCompany
-from ..Account_personal import AccountPersonal
+from app.Account_company import AccountCompany
+from app.Account_personal import AccountPersonal
 
 
-class TestPersonalExpressTransfers(unittest.TestCase):
+class TestPersonalExpressTransfers(TestCase):
     personal_data = {
         "name": "Antoni",
         "last_name": "Krawczyk",
@@ -51,10 +51,12 @@ class TestPersonalExpressTransfers(unittest.TestCase):
         )
 
 
-class TestCompanyExpressTransfers(unittest.TestCase):
-    company_data = {"name": "Mateusz", "nip": "1234567890"}
+class TestCompanyExpressTransfers(TestCase):
+    company_data = {"name": "Mateusz", "nip": "8461627563"}
 
-    def setUp(self) -> None:
+    @mock.patch("app.Account_company.AccountCompany.validate_nip")
+    def setUp(self, mock_object) -> None:
+        mock_object.return_value = True
         self.acc_company = AccountCompany(**self.company_data)
         self.acc_company.history = []
 

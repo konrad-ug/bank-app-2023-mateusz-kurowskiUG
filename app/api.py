@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from json import dumps as json_dumps
-from .Account_personal import AccountPersonal
-from .AccountsRecord import AccountsRecord
+from app.Account_personal import AccountPersonal
+from app.AccountsRecord import AccountsRecord
 
 app = Flask(__name__)
 
