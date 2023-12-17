@@ -3,8 +3,8 @@ from app.Account import Account
 import datetime
 import requests
 
-MF_PROD = 'https://wl-api.mf.gov.pl/'
-MF_TEST = 'https://wl-test.mf.gov.pl/'
+MF_PROD = "https://wl-api.mf.gov.pl/"
+MF_TEST = "https://wl-test.mf.gov.pl/"
 
 
 class AccountCompany(Account):
@@ -42,9 +42,10 @@ class AccountCompany(Account):
         )
 
     def validate_nip(self, nip, BANK_APP_MF_URL=MF_TEST):
-        date = datetime.datetime.today().strftime('%Y-%m-%d')
+        date = datetime.datetime.today().strftime("%Y-%m-%d")
         response = requests.get(
-            f"{BANK_APP_MF_URL}/api/search/nip/{nip}", params={"date": date})
+            f"{BANK_APP_MF_URL}/api/search/nip/{nip}", params={"date": date}
+        )
         print(response.text)
         return response.status_code == 200
 
