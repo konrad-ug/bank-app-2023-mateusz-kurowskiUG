@@ -1,11 +1,12 @@
-import re, datetime
+import re
+import datetime
 from typing import Any
 
 try:  # pragma: no cover
     from typing import Self  # pragma: no cover
 except ImportError:  # pragma: no cover
     from typing_extensions import Self  # pragma: no cover
-from .Account import Account  # pragma: no cover
+from app.Account import Account  # pragma: no cover
 
 
 class AccountPersonal(Account):
@@ -14,6 +15,7 @@ class AccountPersonal(Account):
         self.name = name
         self.last_name = last_name
         self.balance = 0
+        self.email_msg = "Twoja historia konta to:"
         if self.validate_pesel(pesel):
             self.pesel = pesel
         else:

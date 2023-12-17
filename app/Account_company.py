@@ -7,6 +7,8 @@ class AccountCompany(Account):
         super().__init__()
         self.express_transfer_fee = 5
         self.name = name
+        self.email_msg = "Historia konta Twojej firmy to:"
+
         if len(nip) != 10:
             self.nip = "Niepoprawny NIP!"
         else:
