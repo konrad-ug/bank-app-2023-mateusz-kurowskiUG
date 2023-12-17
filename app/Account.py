@@ -1,6 +1,6 @@
 from typing import Any
-
-
+from datetime import datetime
+from app.SMTPServer import SMTPConnection
 try:  # pragma: no cover
     from typing import Self  # pragma: no cover
 except ImportError:  # pragma: no cover
@@ -11,6 +11,7 @@ class Account:
     balance = 0
     express_transfer_fee = 0
     history = []
+    email_msg = ""
 
     def __setitem__(self, __name: str, __value: Any):  # pragma: no cover
         setattr(self, __name, __value)
@@ -48,3 +49,9 @@ class Account:
             self.balance -= amount + self.express_transfer_fee
             self.history.append(-amount)
             self.history.append(-self.express_transfer_fee)
+
+    def send_history_on_email(self, receiver, SMTP_class: SMTPConnection):
+        date = datetime.now().strftime("%Y-%m-%d")
+        topic = f"Wyciąg z dnia {date}"
+        content = f"{self.email_msg} {self.history}"
+        return SMTP_class.send_email(topic, content, receiver)
