@@ -3,10 +3,6 @@ from ..api import *
 import requests
 import copy
 
-# http cat
-
-# TOTALLY NOT ATOMIC, BUT SETUP NOT WORKING FOR SOME REASON!
-
 
 class TestApi(TestCase):
     name = "Jan"
@@ -17,40 +13,36 @@ class TestApi(TestCase):
     acc = AccountPersonal(name, last_name, pesel)
     acc_json = acc.__dict__()
 
-    @classmethod
-    def setUpClass(cls):
-        AccountsRecord.accounts = [cls.acc]
+    def setUp(self) -> None:
+        requests.post(self.url, json=self.acc_json)
 
-    def setUp(self):
-        AccountsRecord.accounts = [self.acc]
+    def tearDown(self):
+        requests.delete(self.url + "/" + self.pesel)
 
-    def tearDown(self) -> None:
-        AccountsRecord.accounts = []
+    def test_create_not_unique_acc(self):
+        new_acc = {
+            "name": "Jan",
+            "last_name": "Kowalski",
+            "pesel": self.pesel,
+        }
+        response = requests.post(self.url, json=new_acc)
+        self.assertEqual(response.status_code, 409, "Acc should not be created!")
 
-    @classmethod
-    def tearDownClass(cls):
-        AccountsRecord.accounts = []
-
-    def test_create_acc(self):
-        response = requests.post(self.url, json=self.acc_json)
-        self.assertEqual(response.status_code, 201, f"{response.text}")
-
+    def test_create_unique_acc(self):
         new_acc = {
             "name": "Jan",
             "last_name": "Kowalski",
             "pesel": self.second_pesel,
         }
-        response = requests.post(self.url, json=self.acc_json)
-        self.assertEqual(response.status_code, 409, "Acc should not be created!")
-        response = requests.delete(self.url + "/" + self.second_pesel)
-        response = requests.delete(self.url + "/" + self.pesel)
+        response = requests.post(self.url, json=new_acc)
+        self.assertEqual(response.status_code, 201, "Acc should  be created!")
+        requests.delete(self.url + "/" + self.second_pesel)
 
     def test_get_acc(self):
         response = requests.get(self.url)
         self.assertEqual(response.status_code, 200, "GET NOT WORKING!")
 
     def test_valid_patch(self):
-        response = requests.post(self.url, json=self.acc_json)
         test_obj = {
             "name": "Adam",
             "last_name": "Banan",
@@ -59,7 +51,10 @@ class TestApi(TestCase):
         }
         response = requests.patch(self.url + "/" + self.acc.pesel, json=test_obj)
         self.assertEqual(response.status_code, 200, "Patch should be executed!")
-        response = requests.delete(self.url + "/" + self.second_pesel)
+        response = requests.patch(
+            self.url + "/" + self.second_pesel, json=self.acc_json
+        )
+        self.assertEqual(response.status_code, 200, "Patch should be executed!")
 
     def test_invalid_patch(self):
         response = requests.patch(
@@ -74,8 +69,6 @@ class TestApi(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_valid_deleting(self):
-        response = requests.post(self.url, json=self.acc_json)
-
         response = requests.delete(self.url + f"/{self.pesel}")
         self.assertEqual(response.status_code, 200)
 
@@ -85,17 +78,30 @@ class TestApi(TestCase):
 
     def test_counting(self):
         response = requests.get(self.url + "/count")
-        print(AccountsRecord.accounts)
+        self.assertEqual(response.json(), {"count": 1})
         self.assertEqual(response.status_code, 200)
 
     def test_finding_valid_acc(self):
-        response = requests.post(self.url, json=self.acc_json)
-
         response = requests.get(self.url + "/" + self.pesel)
         self.assertEqual(response.status_code, 200)
-        response = requests.delete(self.url + "/" + self.pesel)
 
     def test_finding_invalid_acc(self):
         response = requests.get(self.url + "/" + "1")
         self.assertEqual(response.status_code, 404)
 
+    def test_loading(self):
+        requests.get(self.url + "/drop")
+        requests.post(self.url, json=self.acc_json)
+        response = requests.patch(self.url + "/load")
+        self.assertEqual(response.status_code, 200, "Load should be successful")
+        self.assertEqual(
+            response.json(), [self.acc.__dict__()], "Load result should be different"
+        )
+
+    # def test_saving(self):
+    #     requests.get(self.url + "/drop")
+    #     response = requests.patch(self.url + "/save")
+    #     self.assertEqual(response.status_code, 200, "Save should be successful")
+    #     self.assertEqual(
+    #         response.json(), [self.acc.__dict__()], "Save result should be different"
+    #     )

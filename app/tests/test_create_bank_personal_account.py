@@ -9,6 +9,7 @@ class TestBasicPersonalMethods(unittest.TestCase):
     last_name = "Kowalski"
     pesel = "71081619681"
     balance = 0
+    history = []
     acc = AccountPersonal(name, last_name, pesel)
 
     def test_dict(self):
@@ -17,6 +18,7 @@ class TestBasicPersonalMethods(unittest.TestCase):
             "last_name": self.last_name,
             "pesel": self.pesel,
             "balance": self.balance,
+            "history":self.history
         }
         self.assertEqual(self.acc.__dict__(), dicted, "__dict__ did't work!")
 

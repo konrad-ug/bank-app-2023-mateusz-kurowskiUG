@@ -3,10 +3,6 @@ from ..api import *
 import requests
 import copy
 
-# http cat
-
-# TOTALLY NOT ATOMIC, BUT SETUP NOT WORKING FOR SOME REASON!
-
 
 class TestApi(TestCase):
     name = "Jan"
@@ -19,6 +15,7 @@ class TestApi(TestCase):
     def test_01_create_acc(self):
         response = requests.post(self.url, json=self.acc_json)
         self.assertEqual(response.status_code, 201, f"{response.text}")
+        print(response.json())
         self.assertEqual(
             response.json(),
             self.acc_json,
@@ -54,7 +51,9 @@ class TestApi(TestCase):
         }
         response = requests.patch(self.url + "/" + self.pesel, json=test_obj)
         self.assertEqual(response.status_code, 200, "Patch should be executed!")
-        self.assertEqual(response.json(), test_obj, "Object didn't get changed!")
+        self.assertEqual(
+            response.json(), {**test_obj, "history": []}, "Object didn't get changed!"
+        )
 
     def test_06_invalid_patch(self):
         response = requests.patch(

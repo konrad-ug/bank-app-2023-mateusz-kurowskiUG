@@ -7,7 +7,6 @@ class TestApiTransfers(unittest.TestCase):
     name = "Jan"
     last_name = "Kowalski"
     pesel = "07303157776"
-    second_pesel = "71081619681"
     url = "http://localhost:5000/api/accounts"
     acc = AccountPersonal(name, last_name, pesel)
     acc_json = acc.__dict__()
@@ -21,6 +20,7 @@ class TestApiTransfers(unittest.TestCase):
 
     def tearDown(self) -> None:
         requests.delete(self.url + f"/{self.pesel}")
+        print(requests.get(self.url))
 
     def test_valid_incoming_transfer(self):
         body = {"amount": 50, "type": "incoming"}

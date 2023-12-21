@@ -1,21 +1,21 @@
-import unittest
+from unittest import TestCase,mock
 from parameterized import *
 from app.AccountsRecord import AccountsRecord
 from app.Account_personal import AccountPersonal
-import copy
+import json
 
-
-class TestAccountRecords(unittest.TestCase):
+class TestAccountRecords(TestCase):
     name = "Jan"
     last_name = "Kowalski"
     pesel = "65112238477"
     second_pesel = "71081619681"
-    dicted = {"name": name, "last_name": last_name,
-              "pesel": pesel, "balance": 0}
+    dicted_acc = {"name": name, "last_name": last_name,
+              "pesel": pesel, "balance": 0,"history":[]}
 
     @classmethod
     def setUpClass(cls):
         cls.acc = AccountPersonal(cls.name, cls.last_name, cls.pesel)
+        cls.second_acc = AccountPersonal(cls.name, cls.last_name, cls.second_pesel)
         AccountsRecord.accounts = [cls.acc]
 
     def setUp(self):
@@ -92,7 +92,25 @@ class TestAccountRecords(unittest.TestCase):
         self.assertEqual(
             updated, None, "Modyfying acc does not work! Found some fake acc!"
         )
+    
+    @mock.patch("app.AccountsRecord.AccountsRecord.collection")
+    def test_loading(self,mocked_object):
+        mocked_object.find.return_value = [self.acc.__dict__()]
+        to_load = AccountsRecord.load()
+        to_load = [i.__dict__() for i in to_load]
+        self.assertEqual(to_load,[self.acc.__dict__()],"load does not work")
+        self.assertEqual(len(AccountsRecord.accounts),1,"Length of AR.accounts should equal 1")
+        self.assertEqual(to_load[0]["name"],self.acc.name,"Name should be different")
 
+    @mock.patch("app.AccountsRecord.AccountsRecord.collection")
+    def test_saving(self,mocked_object):
+        mocked_object.find.return_value = [self.acc.__dict__()]
+        saved = AccountsRecord.save()
+
+        self.assertEqual(len(AccountsRecord.accounts),1,"Length of AR.accounts should equal 1")
+        dicted_AR_accounts = [acc.__dict__() for acc in AccountsRecord.accounts]
+        self.assertEqual(dicted_AR_accounts,saved,"AccountRecords.accounts should be empty")
+        
     @classmethod
     def tearDownClass(cls):
         AccountsRecord.accounts.clear()

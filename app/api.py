@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
-from json import dumps as json_dumps
+from json import dumps, loads
 from app.Account_personal import AccountPersonal
 from app.AccountsRecord import AccountsRecord
+from bson import json_util
 
 app = Flask(__name__)
 
@@ -105,3 +106,20 @@ def transfer(pesel):
         case _:
             return jsonify({"message": "wrong type of transfer"}), 403
     return jsonify({"message": "Zlecenie przyjęte do realizacji!"}), 200
+
+
+@app.route("/api/accounts/save", methods=["PATCH"])
+def save():
+    return loads(json_util.dumps(AccountsRecord.save())), 200
+
+
+@app.route("/api/accounts/load", methods=["PATCH"])
+def load():
+    accs = AccountsRecord.load()
+    return jsonify([i.__dict__() for i in accs]), 200
+
+
+@app.route("/api/accounts/drop", methods=["GET"])
+def drop():
+    AccountsRecord.accounts = []
+    return loads(json_util.dumps(AccountsRecord.save())), 200
