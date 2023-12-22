@@ -118,7 +118,7 @@ class TestAccountRecords(TestCase):
         to_load = [i.__dict__() for i in to_load]
         self.assertEqual(to_load,[],"load does not work")
         self.assertEqual(len(AccountsRecord.accounts),0,"Length of AR.accounts should equal 0")
-
+        
     
 
     @mock.patch("app.AccountsRecord.AccountsRecord.collection")
