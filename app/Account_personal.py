@@ -31,6 +31,7 @@ class AccountPersonal(Account):
             "last_name": self.last_name,
             "pesel": self.pesel,
             "balance": self.balance,
+            "history": self.history,
         }
 
     def __str__(self) -> str:

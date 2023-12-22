@@ -14,4 +14,4 @@ Project uses Poetry
 `python3 -m coverage html`
 `flask --app app/api.py --debug run`
 `python -m unittest discover app.tests` to SKIP api_tests
-Maybe mock api?
+`docker compose -f compose.yml up` to run mongo
