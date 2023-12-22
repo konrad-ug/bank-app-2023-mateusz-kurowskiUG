@@ -12,6 +12,14 @@ class TestApi(TestCase):
     url = "http://localhost:5000/api/accounts"
     acc_json = AccountPersonal(name, last_name, pesel).__dict__()
 
+    @classmethod
+    def setUpClass(cls):
+        requests.post(cls.url + "/drop")
+
+    @classmethod
+    def tearDownClass(cls):
+        requests.post(cls.url + "/drop")
+
     def test_01_create_acc(self):
         response = requests.post(self.url, json=self.acc_json)
         self.assertEqual(response.status_code, 201, f"{response.text}")

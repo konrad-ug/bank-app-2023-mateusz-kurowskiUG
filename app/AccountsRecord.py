@@ -11,10 +11,6 @@ class AccountsRecord:
     collection = db["accounts"]
 
     @classmethod
-    def __eq__(cls, __value):
-        return cls.accounts == __value.accounts
-
-    @classmethod
     def add_acc_to_record(cls, acc):
         if isinstance(acc, AccountPersonal):
             cls.accounts.append(acc)
@@ -57,19 +53,18 @@ class AccountsRecord:
     def load(cls):
         cls.accounts = []
         for account in cls.collection.find():
-            name = account["name"]
-            last_name = account["last_name"]
-            pesel = account["pesel"]
-            balance = account["balance"]
-            history = account["history"]
-            if None in [name, last_name, pesel, history, balance]:
-                pass
-            else:
-                print("es")
+            try:
+                name = account["name"]
+                last_name = account["last_name"]
+                pesel = account["pesel"]
+                balance = account["balance"]
+                history = account["history"]
                 acc = AccountPersonal(name, last_name, pesel)
                 acc.balance = balance
                 acc.history = history
                 cls.add_acc_to_record(acc)
+            except KeyError:
+                pass
         return cls.accounts
 
     @classmethod

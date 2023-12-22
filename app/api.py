@@ -119,7 +119,8 @@ def load():
     return jsonify([i.__dict__() for i in accs]), 200
 
 
-@app.route("/api/accounts/drop", methods=["GET"])
+@app.route("/api/accounts/drop", methods=["POST"])
 def drop():
     AccountsRecord.accounts = []
+    AccountsRecord.save()
     return loads(json_util.dumps(AccountsRecord.save())), 200

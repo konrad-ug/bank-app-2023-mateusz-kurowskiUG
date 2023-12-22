@@ -22,13 +22,22 @@ class TestAccountRecords(TestCase):
         self.acc = AccountPersonal(self.name, self.last_name, self.pesel)
         AccountsRecord.accounts = [self.acc]
 
+    def test__eq__(self):
+        self.assertEqual(AccountsRecord.accounts,[self.acc],"Eq does not work")
+        
+    def test_invalid_adding(self):
+        result = AccountsRecord.add_acc_to_record(1)
+        self.assertFalse(result,f"Object {1} should not be added to AR")
+        
     def test_adding_accounts(self):
-        AccountsRecord.add_acc_to_record(self.acc)
+        result = AccountsRecord.add_acc_to_record(self.acc)
         self.assertEqual(
             AccountsRecord.accounts,
             [self.acc, self.acc],
             f"Account: {self.acc} hasn't been added!",
         )
+        self.assertTrue(result,"Result should be True")
+        
         self.assertEqual(
             AccountsRecord.number_of_acc(),
             len(AccountsRecord.accounts),
@@ -101,6 +110,16 @@ class TestAccountRecords(TestCase):
         self.assertEqual(to_load,[self.acc.__dict__()],"load does not work")
         self.assertEqual(len(AccountsRecord.accounts),1,"Length of AR.accounts should equal 1")
         self.assertEqual(to_load[0]["name"],self.acc.name,"Name should be different")
+        
+    @mock.patch("app.AccountsRecord.AccountsRecord.collection")
+    def test_strange_loading(self,mocked_object):
+        mocked_object.find.return_value = [{"test":"test","test1":"test1"}]
+        to_load = AccountsRecord.load()
+        to_load = [i.__dict__() for i in to_load]
+        self.assertEqual(to_load,[],"load does not work")
+        self.assertEqual(len(AccountsRecord.accounts),0,"Length of AR.accounts should equal 0")
+
+    
 
     @mock.patch("app.AccountsRecord.AccountsRecord.collection")
     def test_saving(self,mocked_object):

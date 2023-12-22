@@ -14,6 +14,14 @@ class TestApiTransfers(unittest.TestCase):
     def getAcc(self):
         return requests.get(self.url + f"/{self.pesel}")
 
+    @classmethod
+    def setUpClass(cls):
+        requests.post(cls.url + "/drop")
+
+    @classmethod
+    def tearDownClass(cls):
+        requests.post(cls.url + "/drop")
+
     def setUp(self):
         requests.post(self.url, json=self.acc_json)
         requests.patch(self.url + f"/{self.pesel}", json={"balance": 100})

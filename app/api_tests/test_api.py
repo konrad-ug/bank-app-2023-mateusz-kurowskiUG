@@ -13,6 +13,14 @@ class TestApi(TestCase):
     acc = AccountPersonal(name, last_name, pesel)
     acc_json = acc.__dict__()
 
+    @classmethod
+    def setUpClass(cls):
+        requests.post(cls.url + "/drop")
+
+    @classmethod
+    def tearDownClass(cls):
+        requests.post(cls.url + "/drop")
+
     def setUp(self) -> None:
         requests.post(self.url, json=self.acc_json)
 
@@ -89,19 +97,17 @@ class TestApi(TestCase):
         response = requests.get(self.url + "/" + "1")
         self.assertEqual(response.status_code, 404)
 
-    def test_loading(self):
-        requests.get(self.url + "/drop")
+    def test_01_saving(self):
+        response = requests.patch(self.url + "/save")
+        self.assertEqual(response.status_code, 200, "Save should be successful")
+        self.assertEqual(
+            response.json(), [self.acc.__dict__()], "Save result should be different"
+        )
+
+    def test_02_loading(self):
         requests.post(self.url, json=self.acc_json)
         response = requests.patch(self.url + "/load")
         self.assertEqual(response.status_code, 200, "Load should be successful")
         self.assertEqual(
             response.json(), [self.acc.__dict__()], "Load result should be different"
         )
-
-    # def test_saving(self):
-    #     requests.get(self.url + "/drop")
-    #     response = requests.patch(self.url + "/save")
-    #     self.assertEqual(response.status_code, 200, "Save should be successful")
-    #     self.assertEqual(
-    #         response.json(), [self.acc.__dict__()], "Save result should be different"
-    #     )
