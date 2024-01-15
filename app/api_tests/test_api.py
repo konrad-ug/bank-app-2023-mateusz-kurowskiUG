@@ -68,9 +68,9 @@ class TestApi(TestCase):
         response = requests.patch(
             self.url + "/",
             json={
-                "name": "Adam",
-                "last_name": "Banan",
-                "pesel": "10987654321",
+                "name": "Ada",
+                "last_name": "Bana",
+                "pesel": "10987654322",
                 "balance": 10,
             },
         )

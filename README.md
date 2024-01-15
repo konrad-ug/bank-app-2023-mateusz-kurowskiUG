@@ -12,6 +12,6 @@ Project uses Poetry
 `python3 -m coverage run -m unittest` coverage
 `python3 -m coverage report` coverage
 `python3 -m coverage html`
-`flask --app app/api.py --debug run`
+`flask --app app/api.py`
 `python -m unittest discover app.tests` to SKIP api_tests
 `docker compose -f compose.yml up` to run mongo
