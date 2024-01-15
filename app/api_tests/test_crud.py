@@ -8,7 +8,7 @@ class TestApi(TestCase):
     name = "Jan"
     last_name = "Kowalski"
     pesel = "07303157776"
-    second_pesel = "71081619681"
+    second_pesel = "71081619682"
     url = "http://localhost:5000/api/accounts"
     acc_json = AccountPersonal(name, last_name, pesel).__dict__()
 
@@ -23,7 +23,6 @@ class TestApi(TestCase):
     def test_01_create_acc(self):
         response = requests.post(self.url, json=self.acc_json)
         self.assertEqual(response.status_code, 201, f"{response.text}")
-        print(response.json())
         self.assertEqual(
             response.json(),
             self.acc_json,

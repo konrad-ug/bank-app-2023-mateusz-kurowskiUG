@@ -20,6 +20,7 @@ def add_acc():
     found = AccountsRecord.search_for_acc(pesel)
     if found is None:
         acc = AccountPersonal(name, last_name, pesel)
+        acc.history = []
         AccountsRecord.add_acc_to_record(acc)
         return jsonify(acc.__dict__()), 201
     else:
@@ -29,6 +30,9 @@ def add_acc():
 @app.route("/api/accounts/count", methods=["GET"])
 def how_many_accs():
     return jsonify({"count": AccountsRecord.number_of_acc()}), 200
+
+
+6
 
 
 @app.route("/api/accounts", methods=["GET"])
@@ -95,11 +99,10 @@ def transfer(pesel):
     found_acc = AccountsRecord.search_for_acc(pesel)
     if found_acc is None:
         return jsonify({"message": "Couldn't find acc with such a pesel!"}), 404
-
+    print("NAZWA", found_acc.last_name)
     match transfer_type:
         case "incoming":
-            x = found_acc.receive_transfer(amount)
-            print(x)
+            found_acc.receive_transfer(amount)
         case "outgoing":
             found_acc.outgoing_transfer(amount)
 

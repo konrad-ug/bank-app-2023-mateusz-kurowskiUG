@@ -14,6 +14,7 @@ class AccountsRecord:
     def add_acc_to_record(cls, acc):
         if isinstance(acc, AccountPersonal):
             cls.accounts.append(acc)
+            print(acc.history)
             return True
         return False
 
