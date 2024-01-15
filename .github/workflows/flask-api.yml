@@ -37,5 +37,5 @@ jobs:
       - name: Test the API
         run: |
           docker compose -f compose.yml up -d &
-          flask --app app/api.py run &
+          flask --app app/api.py run 
           python3 -m unittest discover app.api_tests
