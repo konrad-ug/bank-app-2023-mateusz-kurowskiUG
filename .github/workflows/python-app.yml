@@ -39,5 +39,5 @@ jobs:
       - name: Test with Unittest and Coverage
         run: |
           python3 -m unittest discover app.tests
-          python3 -m coverage run -m unittest
+          python3 -m coverage run -m unittest discover app.tests
           python3 -m coverage report --fail-under=100
