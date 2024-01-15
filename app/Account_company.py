@@ -46,7 +46,6 @@ class AccountCompany(Account):
         response = requests.get(
             f"{BANK_APP_MF_URL}/api/search/nip/{nip}", params={"date": date}
         )
-        print(response.text)
         return response.status_code == 200
 
     def take_credit(self, amount):

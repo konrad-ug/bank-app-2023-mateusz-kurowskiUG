@@ -99,7 +99,6 @@ def transfer(pesel):
     found_acc = AccountsRecord.search_for_acc(pesel)
     if found_acc is None:
         return jsonify({"message": "Couldn't find acc with such a pesel!"}), 404
-    print("NAZWA", found_acc.last_name)
     match transfer_type:
         case "incoming":
             found_acc.receive_transfer(amount)
