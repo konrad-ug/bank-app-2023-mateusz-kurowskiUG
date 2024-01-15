@@ -1,7 +1,6 @@
 from app.Account_personal import AccountPersonal
 from pymongo import MongoClient
-from pprint import pprint
-from json import dumps as json_dumps
+import os
 
 
 class AccountsRecord:
