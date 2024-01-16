@@ -1,12 +1,10 @@
 from app.Account_personal import AccountPersonal
 from pymongo import MongoClient
-from pprint import pprint
-from json import dumps as json_dumps
 
 
 class AccountsRecord:
     accounts = []
-    client = MongoClient("localhost", 27017)
+    client = MongoClient("mongodb://127.0.0.1", 27017)
     db = client["mydb"]
     collection = db["accounts"]
 
