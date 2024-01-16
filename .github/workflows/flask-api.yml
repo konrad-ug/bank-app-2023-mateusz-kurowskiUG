@@ -45,8 +45,7 @@ jobs:
       - name: Run container
         run: |
           docker compose -f compose.yml up -d
-      - name: Wait for container to start
-        run: sleep 10
+
       - name: Run tests
         run: |
           python3 -m unittest discover app.api_tests
