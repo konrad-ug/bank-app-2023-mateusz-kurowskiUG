@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install flake8 pytest flask pymongo parameterized requests
+          pip install flake8 pytest flask pymongo parameterized requests behave unittest_assertions
           pip freeze > requirements.txt
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
@@ -38,7 +38,6 @@ jobs:
       - name: Start Flask API
         run: |
           flask --app app.api run &
-
 
       - name: Run tests
         run: |
