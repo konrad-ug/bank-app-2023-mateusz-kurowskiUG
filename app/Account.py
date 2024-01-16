@@ -1,6 +1,7 @@
 from typing import Any
 from datetime import datetime
 from app.SMTPServer import SMTPConnection
+
 try:  # pragma: no cover
     from typing import Self  # pragma: no cover
 except ImportError:  # pragma: no cover
@@ -26,14 +27,20 @@ class Account:
             and self.history == __value.history
         )
 
-    def outgoing_transfer(self, amount: float):
+    def outgoing_transfer(self, amount: float or int):
+        if not isinstance(amount, (int, float)):
+            raise ValueError("Amount should be an integer!")
         if self.balance >= amount and amount > 0:
             self.balance -= amount
             self.history.append(-amount)
             return True
         return False
 
-    def receive_transfer(self, amount):
+    def receive_transfer(self, amount: float or int):
+        print(amount)
+        if not isinstance(amount, (int, float)):
+            raise ValueError("Amount should be an integer!")
+
         if amount > 0:
             self.balance += amount
             self.history.append(amount)

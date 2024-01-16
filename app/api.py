@@ -32,9 +32,6 @@ def how_many_accs():
     return jsonify({"count": AccountsRecord.number_of_acc()}), 200
 
 
-6
-
-
 @app.route("/api/accounts", methods=["GET"])
 def get_accounts():
     return [i.__dict__() for i in AccountsRecord.accounts], 200
@@ -66,8 +63,13 @@ def update_acc(pesel):
         obj["pesel"] = data["pesel"]
 
     if "balance" in data and data["balance"]:
-        obj["balance"] = data["balance"]
-
+        if isinstance(data["balance"], (int, float)):
+            obj["balance"] = data["balance"]
+        else:
+            try:
+                obj["balance"] = float(data["balance"])
+            except ValueError:
+                return jsonify({"message": "Balance should be a number!"}), 403
     result = AccountsRecord.modify_acc(pesel, obj)
     if result is None:
         return jsonify({"message": "Account not found!"}), 404
@@ -93,8 +95,11 @@ def transfer(pesel):
 
     amount = data["amount"]
     transfer_type = data["type"]
-    if not amount or not transfer_type:
+    if amount is None or transfer_type is None:
         return jsonify({"message": "No amount or type provided!"}), 404
+
+    if not isinstance(amount, int):
+        return jsonify({"message": "Amount should be an integer!"}), 404
 
     found_acc = AccountsRecord.search_for_acc(pesel)
     if found_acc is None:

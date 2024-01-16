@@ -1,11 +1,7 @@
-version: '3.8'
+version: "3.8"
 services:
   mongo:
     image: mongo:latest
     container_name: mongo_container
-    platform: linux/arm64
     ports:
       - "27017:27017"
-    command: "sh -c 'echo Hello from MongoDB container && exec mongod --bind_ip_all'"
-    # volumes:
-    #   - mongo_data:/data/db

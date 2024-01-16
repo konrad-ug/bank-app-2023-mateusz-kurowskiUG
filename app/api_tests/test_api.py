@@ -1,7 +1,6 @@
 from unittest import TestCase
-from ..api import *
+from app.Account_personal import AccountPersonal
 import requests
-import copy
 
 
 class TestApi(TestCase):
@@ -111,3 +110,9 @@ class TestApi(TestCase):
         self.assertEqual(
             response.json(), [self.acc.__dict__()], "Load result should be different"
         )
+
+    def test_03_dropping(self):
+        requests.post(self.url, json=self.acc_json)
+        response = requests.post(self.url + "/drop")
+        self.assertEqual(response.status_code, 200, "Load should be successful")
+        self.assertEqual(response.json(), [], "Load result should be different")
