@@ -1,6 +1,3 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
-
 name: Flask API tests
 
 on:
@@ -16,12 +13,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # services:
-    #   mongo_container:
-    #     image: mongo
-    #     ports:
-    #       - 27017:27017
-
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.12
@@ -35,22 +26,16 @@ jobs:
           pip freeze > requirements.txt
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      # - name: Install flask
-      #   run: |
-      #     pip install flask
-
       - name: Lint with flake8
         run: |
-          # stop the build if there are Python syntax errors or undefined names
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Start Flask API
         run: |
           flask --app app.api run &
       - name: Run container
         run: |
-          docker compose -f compose.yml up -d
+          docker-compose -f compose.yml up -d  # Corrected the command
 
       - name: Get MongoDB container IP
         run: |
