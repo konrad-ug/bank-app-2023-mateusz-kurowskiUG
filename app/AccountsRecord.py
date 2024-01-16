@@ -4,7 +4,7 @@ from pymongo import MongoClient
 
 class AccountsRecord:
     accounts = []
-    client = MongoClient("mongodb://mongo_container", 27017)
+    client = MongoClient("mongodb://0.0.0.0", 27017)
     db = client["mydb"]
     collection = db["accounts"]
 
