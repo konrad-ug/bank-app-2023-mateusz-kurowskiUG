@@ -1,7 +1,6 @@
 from unittest import TestCase
 from app.Account_personal import AccountPersonal
 import requests
-import copy
 
 
 class TestApi(TestCase):
