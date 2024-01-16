@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install flake8 pytest
+          pip install flake8 pytest behave unittest_assertions requests
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Lint with flake8
         run: |
@@ -33,10 +33,14 @@ jobs:
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      # - name: Run Flask server
-      #   run: |
-      #     flask --app app/api.py --debug run
+      - name: Run docker container
+        run: |
+          docker-compose -f compose.yml up -d
+
+      - name: Run Flask server
+        run: |
+          flask --app app.api run &
 
       - name: Test with Gherkin
         run: |
-          python3 -m behave app/features
+          python3 -m behave
