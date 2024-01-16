@@ -16,6 +16,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      mongo_container:
+        image: mongo
+        ports:
+          - 27017:27017
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.12
