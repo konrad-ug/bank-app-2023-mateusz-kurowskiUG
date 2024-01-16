@@ -39,4 +39,4 @@ jobs:
 
       - name: Test with Gherkin
         run: |
-          python3 -m behave app/features
+          python3 -m behave
