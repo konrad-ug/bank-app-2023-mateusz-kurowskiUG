@@ -5,7 +5,7 @@ import os
 
 class AccountsRecord:
     accounts = []
-    client = MongoClient(f"mongodb://172.17.0.1", 27017)
+    client = MongoClient("localhost", 27017)
     db = client["mydb"]
     collection = db["accounts"]
 
