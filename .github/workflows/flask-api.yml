@@ -34,8 +34,14 @@ jobs:
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      - name: Test the API
+      - name: Start Flask API
         run: |
-          docker compose -f compose.yml up -d &
-          flask --app app/api.py run 
+          flask --app app/api.py run &
+      - name: Run container
+        run: |
+          docker compose -f compose.yml up -d
+      - name: Wait for container to start
+        run: sleep 10
+      - name: Run tests
+        run: |
           python3 -m unittest discover app.api_tests
