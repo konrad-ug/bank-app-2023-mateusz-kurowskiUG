@@ -32,9 +32,6 @@ def how_many_accs():
     return jsonify({"count": AccountsRecord.number_of_acc()}), 200
 
 
-6
-
-
 @app.route("/api/accounts", methods=["GET"])
 def get_accounts():
     return [i.__dict__() for i in AccountsRecord.accounts], 200

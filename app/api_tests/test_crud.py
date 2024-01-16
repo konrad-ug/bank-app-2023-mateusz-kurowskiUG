@@ -1,5 +1,5 @@
 from unittest import TestCase
-from ..api import *
+from app.Account_personal import AccountPersonal
 import requests
 import copy
 
