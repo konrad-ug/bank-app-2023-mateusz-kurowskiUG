@@ -29,9 +29,9 @@ jobs:
           pip freeze > requirements.txt
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Install flask
-        run: |
-          pip install flask
+      # - name: Install flask
+      #   run: |
+      #     pip install flask
 
       - name: Lint with flake8
         run: |
@@ -41,7 +41,7 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Start Flask API
         run: |
-          flask --app app/api.py run &
+          flask --app app.api run &
       - name: Run container
         run: |
           docker compose -f compose.yml up -d
