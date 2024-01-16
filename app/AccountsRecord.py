@@ -5,8 +5,7 @@ import os
 
 class AccountsRecord:
     accounts = []
-    mongo_ip = os.environ.get("MONGO_IP", "localhost")
-    client = MongoClient(f"mongodb://{mongo_ip}", 27017)
+    client = MongoClient(f"mongodb://172.17.0.1", 27017)
     db = client["mydb"]
     collection = db["accounts"]
 
