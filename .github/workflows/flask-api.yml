@@ -36,7 +36,7 @@ jobs:
           docker compose -f compose.yml up -d
       - name: Run Flask
         run: |
-          flask --app app/api.py &
+          flask --app app.api run &
 
       - name: Test the API
         run: |
