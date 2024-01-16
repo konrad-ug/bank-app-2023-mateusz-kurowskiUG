@@ -1,10 +1,12 @@
 from app.Account_personal import AccountPersonal
 from pymongo import MongoClient
+import os
 
 
 class AccountsRecord:
     accounts = []
-    client = MongoClient("mongodb://0.0.0.0", 27017)
+    mongo_ip = os.environ.get("MONGO_IP", "localhost")
+    client = MongoClient(f"mongodb://{mongo_ip}", 27017)
     db = client["mydb"]
     collection = db["accounts"]
 
