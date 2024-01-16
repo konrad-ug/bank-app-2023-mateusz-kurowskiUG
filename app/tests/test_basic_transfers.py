@@ -13,6 +13,14 @@ class TestBasicTransfers(TestCase):
     }
     company_data = {"name": "Mateusz", "nip": "1234567890"}
 
+    def test_receive_value_error(self):
+        acc = AccountPersonal(**self.personal_data)
+        self.assertRaises(ValueError, acc.receive_transfer, "0")
+
+    def test_outgoing_value_error(self):
+        acc = AccountPersonal(**self.personal_data)
+        self.assertRaises(ValueError, acc.outgoing_transfer, "0")
+
     @mock.patch("app.Account_company.AccountCompany.validate_nip")
     def setUp(self, mock_object):
         mock_object.return_value = True
@@ -82,7 +90,5 @@ class TestBasicTransfers(TestCase):
             self.acc_personal.outgoing_transfer(transfer_val)
             self.acc_company.receive_transfer(transfer_val)
             self.acc_company.outgoing_transfer(transfer_val)
-            self.compare_balance_and_history(
-                self.acc_personal, expected_balance, [])
-            self.compare_balance_and_history(
-                self.acc_company, expected_balance, [])
+            self.compare_balance_and_history(self.acc_personal, expected_balance, [])
+            self.compare_balance_and_history(self.acc_company, expected_balance, [])
