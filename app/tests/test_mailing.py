@@ -3,6 +3,7 @@ from app.SMTPServer import SMTPConnection
 from app.Account_company import AccountCompany
 from app.Account_personal import AccountPersonal
 from datetime import datetime
+from parameterized import parameterized
 
 
 class TestMailing(TestCase):
@@ -22,7 +23,6 @@ class TestMailing(TestCase):
         self.acc_personal = None
         self.acc_company = None
 
-
     def test_personal_email_not_valid(self):
         personal_email = self.acc_personal.send_history_on_email("", self.mock_server)
         self.mock_server.send_email.assert_called_once_with(
@@ -30,10 +30,9 @@ class TestMailing(TestCase):
             f"{self.acc_personal.email_msg} {self.acc_personal.history}",
             "",
         )
-        self.assertEqual(personal_email, False, "Mailing result should be different")
-        self.assertEqual(
+        self.assertFalse(personal_email, "Mailing result should be different")
+        self.assertFalse(
             self.mock_server.send_email.return_value,
-            False,
             "Mailing result should be different",
         )
 
@@ -45,10 +44,9 @@ class TestMailing(TestCase):
             f"{self.acc_personal.email_msg} {self.acc_personal.history}",
             "",
         )
-        self.assertEqual(personal_email, False, "Mailing result should be different")
-        self.assertEqual(
+        self.assertFalse(personal_email, "Mailing result should be different")
+        self.assertFalse(
             self.mock_server.send_email.return_value,
-            False,
             "Mailing result should be different",
         )
 
@@ -62,7 +60,7 @@ class TestMailing(TestCase):
             f"{self.acc_personal.email_msg} {self.acc_personal.history}",
             self.receiver,
         )
-        self.assertEqual(personal_email, True, "Mailing result should be different")
+        self.assertTrue(personal_email, "Mailing result should be different")
 
     def test_company_email_not_valid(self):
         company_email = self.acc_company.send_history_on_email("", self.mock_server)
@@ -71,9 +69,7 @@ class TestMailing(TestCase):
             f"{self.acc_company.email_msg} {self.acc_company.history}",
             "",
         )
-        self.assertEqual(
-            company_email, False, "Company Email result should be different"
-        )
+        self.assertFalse(company_email, "Company Email result should be different")
 
     def test_company_email_with_history(self):
         self.acc_company.history = [100, 200, -100]
@@ -83,10 +79,9 @@ class TestMailing(TestCase):
             f"{self.acc_personal.email_msg} {self.acc_personal.history}",
             "",
         )
-        self.assertEqual(personal_email, False, "Mailing result should be different")
-        self.assertEqual(
+        self.assertFalse(personal_email, "Mailing result should be different")
+        self.assertFalse(
             self.mock_server.send_email.return_value,
-            False,
             "Mailing result should be different",
         )
 
@@ -100,6 +95,4 @@ class TestMailing(TestCase):
             f"{self.acc_company.email_msg} {self.acc_company.history}",
             self.receiver,
         )
-        self.assertEqual(
-            company_email, True, "Company Email result should be different"
-        )
+        self.assertTrue(company_email, "Company Email result should be different")

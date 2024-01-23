@@ -44,6 +44,26 @@ class TestBasicTransfers(TestCase):
             f"Balance is equal: {acc.balance} instead of {expected_balance}!",
         )
 
+    def account_receive_or_execute_transfer(
+        self,
+        acc: AccountCompany | AccountPersonal,
+        transfer_value,
+        expected_balance,
+        expected_history,
+    ):
+        if transfer_value > 0:
+            acc.receive_transfer(transfer_value)
+            acc.receive_transfer(-transfer_value)
+        elif transfer_value < 0:
+            acc.outgoing_transfer(transfer_value)
+            acc.outgoing_transfer(-transfer_value)
+        else:
+            acc.receive_transfer(-transfer_value)
+            acc.receive_transfer(transfer_value)
+            acc.outgoing_transfer(transfer_value)
+            acc.outgoing_transfer(-transfer_value)
+        self.compare_balance_and_history(acc, expected_balance, expected_history)
+
     # negative transfer = outgoing, positive = received just for the test cases
     @parameterized.expand(
         [
@@ -63,32 +83,9 @@ class TestBasicTransfers(TestCase):
     ):
         self.acc_personal.balance = balance
         self.acc_company.balance = balance
-        if transfer_val > 0:
-            self.acc_personal.receive_transfer(transfer_val)
-            self.acc_personal.receive_transfer(-transfer_val)
-            self.compare_balance_and_history(
-                self.acc_personal, expected_balance, expected_history
-            )
-            self.acc_company.receive_transfer(transfer_val)
-            self.acc_company.receive_transfer(-transfer_val)
-            self.compare_balance_and_history(
-                self.acc_company, expected_balance, expected_history
-            )
-        elif transfer_val < 0:
-            self.acc_personal.outgoing_transfer(-transfer_val)
-            self.acc_personal.outgoing_transfer(transfer_val)
-            self.compare_balance_and_history(
-                self.acc_personal, expected_balance, expected_history
-            )
-            self.acc_company.outgoing_transfer(-transfer_val)
-            self.acc_company.outgoing_transfer(transfer_val)
-            self.compare_balance_and_history(
-                self.acc_company, expected_balance, expected_history
-            )
-        else:
-            self.acc_personal.receive_transfer(transfer_val)
-            self.acc_personal.outgoing_transfer(transfer_val)
-            self.acc_company.receive_transfer(transfer_val)
-            self.acc_company.outgoing_transfer(transfer_val)
-            self.compare_balance_and_history(self.acc_personal, expected_balance, [])
-            self.compare_balance_and_history(self.acc_company, expected_balance, [])
+        self.account_receive_or_execute_transfer(
+            self.acc_personal, transfer_val, expected_balance, expected_history
+        )
+        self.account_receive_or_execute_transfer(
+            self.acc_company, transfer_val, expected_balance, expected_history
+        )

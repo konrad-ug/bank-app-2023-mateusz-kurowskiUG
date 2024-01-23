@@ -59,15 +59,12 @@ class TestCreateCompanyAccount(TestCase):
 
             else:
                 self.assertEqual(
-                    acc_company.nip, "Niepoprawny NIP!", f"NIP: {
+                    acc_company.nip, "Nip not valid!", f"NIP: {
                         nip} is not valid!"
                 )
                 self.assertEqual(
                     acc_company.name, name, f"Name: '{name}' not saved!"
                 )
-
-# dla wyższej oceny 100% coverage (lab09)
-
 
 class Test_For_Coverage(TestCase):
     name = "Januszex"

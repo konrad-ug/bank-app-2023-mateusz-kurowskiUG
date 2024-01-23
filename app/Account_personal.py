@@ -1,12 +1,12 @@
 import re
 import datetime
 from typing import Any
+from app.Account import Account
 
 try:  # pragma: no cover
     from typing import Self  # pragma: no cover
 except ImportError:  # pragma: no cover
     from typing_extensions import Self  # pragma: no cover
-from app.Account import Account  # pragma: no cover
 
 
 class AccountPersonal(Account):
@@ -92,7 +92,7 @@ class AccountPersonal(Account):
             return True
         return False
 
-    def take_credit(self, amount):
+    def take_loan(self, amount):
         if amount <= 0:
             return False
         if self.check_three_last_transactions() or self.check_five_last_transactions(

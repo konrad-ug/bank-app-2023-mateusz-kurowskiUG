@@ -2,15 +2,17 @@
 
 # Bank app
 
+Myślę, że udało mi się spełnić wymagania na: 5
+Jedyne zakomentowane linijki do coverage to importy bibliotek w Account_personal oraz metody prywatne **setitem** oraz **getitem**
 Imię i nazwisko: Mateusz Kurowski
 
 Grupa: III
 
-Project uses Poetry
+Project uses Poetry and requires _Python 3.12_
 `Poetry install` to install dependencies
 `Poetry shell` to activate venv
 `python3 -m coverage run -m unittest` coverage
-`python3 -m coverage report` coverage
+`python3 -m coverage report --omit="*/test*" -d tests/coverage` coverage
 `python3 -m coverage html`
 `flask --app app/api.py run`
 `python -m unittest discover app.tests` to SKIP api_tests
