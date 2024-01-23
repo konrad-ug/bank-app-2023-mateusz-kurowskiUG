@@ -1,4 +1,7 @@
-from typing import Self
+try:  # pragma: no cover
+    from typing import Self  # pragma: no cover
+except ImportError:  # pragma: no cover
+    from typing_extensions import Self  # pragma: no cover
 from app.Account import Account
 import datetime
 import requests
@@ -12,10 +15,10 @@ class AccountCompany(Account):
         super().__init__()
         self.express_transfer_fee = 5
         self.name = name
-        self.email_msg = "Historia konta Twojej firmy to:"
+        self.email_msg = "Account's history of your company equals:"
 
         if len(nip) != 10:
-            self.nip = "Niepoprawny NIP!"
+            self.nip = "Nip not valid!"
         else:
             if self.validate_nip(nip):
                 self.nip = nip
@@ -48,7 +51,7 @@ class AccountCompany(Account):
         )
         return response.status_code == 200
 
-    def take_credit(self, amount):
+    def take_loan(self, amount):
         if amount <= 0:
             return False
         if self.validate_company_credit(amount):

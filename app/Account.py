@@ -20,7 +20,7 @@ class Account:
     def __getitem__(self, __name: str) -> Any:  # pragma: no cover
         return getattr(self, __name)
 
-    def __eq__(self, __value: Self) -> bool:  # pragma: no cover
+    def __eq__(self, __value: Self) -> bool:
         return (
             self.balance == __value.balance
             and self.express_transfer_fee == __value.express_transfer_fee

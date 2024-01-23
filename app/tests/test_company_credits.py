@@ -30,7 +30,6 @@ class TestCompanyCredits(TestCase):
         [
             ([], 0, 100, False, 0),
             ([], 0, -100, False, 0),
-
             ([], 200, 100, False, 200),
             ([100, 200, 300], 200, 100, False, 200),
             ([-100, 100], 200, 100, False, 200),
@@ -48,6 +47,6 @@ class TestCompanyCredits(TestCase):
     ):
         self.acc_company.balance = balance
         self.acc_company.history = history
-        decision = self.acc_company.take_credit(credit_val)
+        decision = self.acc_company.take_loan(credit_val)
         self.check_decision(decision, expected_decision)
         self.check_balance(self.acc_company, expected_balance)

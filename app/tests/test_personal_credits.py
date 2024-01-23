@@ -9,8 +9,7 @@ class TestPersonalCredits(unittest.TestCase):
     pesel = "12345678901"
 
     def setUp(self):
-        self.acc_personal = AccountPersonal(
-            self.name, self.last_name, self.pesel)
+        self.acc_personal = AccountPersonal(self.name, self.last_name, self.pesel)
 
     def check_balance(self, acc: AccountPersonal, balance):
         self.assertEqual(
@@ -46,6 +45,6 @@ class TestPersonalCredits(unittest.TestCase):
         self, history, credit_val, expected_decision, expected_balance
     ):
         self.acc_personal.history = history
-        decision = self.acc_personal.take_credit(credit_val)
+        decision = self.acc_personal.take_loan(credit_val)
         self.check_decision(decision, expected_decision)
         self.check_balance(self.acc_personal, expected_balance)
